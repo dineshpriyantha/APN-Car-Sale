@@ -52,7 +52,6 @@ namespace APN_Car_Sale.Controllers
         // DELETE: api/APN_User/5
         public void Delete(int id)
         {
-            Console.WriteLine("Deleted");
         }
     }
 }
