@@ -11,9 +11,9 @@ namespace APN_Car_Sale.Controllers
 {
     public class APN_UserController : ApiController
     {
-        private IUserRepository users;
+        private IRepository<APN_User, int> users;
 
-        public APN_UserController(IUserRepository _users)
+        public APN_UserController(IRepository<APN_User, int> _users)
         {
             this.users = _users;
         }
@@ -21,14 +21,14 @@ namespace APN_Car_Sale.Controllers
         // GET: api/APN_User
         public HttpResponseMessage Get()
         {
-            IEnumerable<APN_User> userList = users.GetAllUsers();
+            IEnumerable<APN_User> userList = users.GetAllData();
             return Request.CreateResponse(HttpStatusCode.OK, userList);
         }
 
         // GET: api/APN_User/5
         public HttpResponseMessage Get(int id)
         {
-            var user = users.GetUser(id);
+            var user = users.GetUniqueData(id);
             if (user == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with id " + id + " not found");

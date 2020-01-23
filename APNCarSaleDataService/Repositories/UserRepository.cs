@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace APNCarSaleDataService.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IRepository<APN_User, int>
     {
         //APN user list
         private List<APN_User> users = new List<APN_User>();
@@ -35,12 +35,17 @@ namespace APNCarSaleDataService.Repositories
                                 }).ToList();
         }
 
-        public List<APN_User> GetAllUsers()
+        public List<APN_User> GetAllData()
         {
             return users;
         }
 
-        public APN_User GetUser(int id)
+        public APN_User GetUniqueData(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveData()
         {
             throw new NotImplementedException();
         }

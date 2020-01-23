@@ -18,6 +18,7 @@
 namespace APN_Car_Sale.DependencyResolution
 {
     using APNCarSaleDataService.Interfaces;
+    using APNCarSaleDataService.Models;
     using APNCarSaleDataService.Repositories;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
@@ -35,7 +36,7 @@ namespace APN_Car_Sale.DependencyResolution
                     scan.WithDefaultConventions();
                 });
             //For<IExample>().Use<Example>();
-            For<IUserRepository>().Use<UserRepository>();
+            For<IRepository<APN_User, int>>().Use<UserRepository>();
         }
 
         #endregion

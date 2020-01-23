@@ -10,9 +10,10 @@ namespace APNCarSaleDataService.Interfaces
     /// <summary>
     /// APN User Interface
     /// </summary>
-    public interface IUserRepository
+    public interface IRepository<TEntity, Tpk> where TEntity : class
     {
-        List<APN_User> GetAllUsers();
-        APN_User GetUser(int id);
+        List<TEntity> GetAllData();
+        TEntity GetUniqueData(Tpk id);
+        void SaveData();
     }
 }
