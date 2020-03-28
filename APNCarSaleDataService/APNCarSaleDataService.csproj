@@ -70,10 +70,11 @@
     <Compile Include="Models\APN_User.cs" />
     <Compile Include="Models\APN_Files.cs" />
     <Compile Include="Models\APN_Category.cs" />
-    <Compile Include="Models\APN_VehicalDetails.cs" />
+    <Compile Include="Models\APN_Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FilesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\VehicleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,14 +9,14 @@ namespace APNCarSaleDataService.Models
     /// <summary>
     /// Venicle Details
     /// </summary>
-    public class APN_VehicalDetails
+    public class APN_Vehicle
     {
         public int Id { get; set; }
         public string Brand { get; set; }
         public string Model { get; set; }
         public string Edition { get; set; }
         public string ModelYear { get; set; }
-        public string Milage { get; set; }
+        public string Mileage { get; set; }
         public string Price { get; set; }
         public string Description { get; set; }
         public bool IsNegotiate { get; set; }

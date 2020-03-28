@@ -15,12 +15,14 @@ namespace APNCarSaleDataService.Repositories
     {
         //APN user list
         private List<APN_User> users = new List<APN_User>();
+
         //Db reference
         private DatabaseConnection db = new DatabaseConnection();
+
         public UserRepository()
         {
             SqlConnection conn = db.GetConnection();
-            SqlDataAdapter da = new SqlDataAdapter("pr_ORA_LoadUser", conn);
+            SqlDataAdapter da = new SqlDataAdapter("pr_APN_LoadUser", conn);
             da.SelectCommand.CommandType = CommandType.StoredProcedure;
             DataSet dat_set = new DataSet();
             da.Fill(dat_set);
