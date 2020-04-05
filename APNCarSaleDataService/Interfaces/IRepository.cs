@@ -14,6 +14,8 @@ namespace APNCarSaleDataService.Interfaces
     {
         List<TEntity> GetAllData();
         TEntity GetUniqueData(Tpk id);
-        void SaveData();
+        void SaveData(TEntity entity);
+        void DeleteRecord(Tpk id);
+        void UpdateRecord(Tpk id, TEntity entity);
     }
 }

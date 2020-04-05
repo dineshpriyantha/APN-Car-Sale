@@ -40,18 +40,61 @@ namespace APN_Car_Sale.Controllers
         }
 
         // POST: api/APN_User
-        public void Post([FromBody]string value)
+        public HttpResponseMessage Post([FromBody]APN_User user)
         {
+            try
+            {
+                users.SaveData(user);
+                return Request.CreateResponse(HttpStatusCode.Created, user.name);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         // PUT: api/APN_User/5
-        public void Put(int id, [FromBody]string value)
+        public HttpResponseMessage Put(int id, [FromBody]APN_User user)
         {
+            try
+            {
+                var entity = users.GetUniqueData(id);
+                if (entity == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with id " + id + " not found to update");
+                }
+                else
+                {
+                    users.UpdateRecord(id, user);
+                    return Request.CreateResponse(HttpStatusCode.OK, "User with id " + id + " update successfully..");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         // DELETE: api/APN_User/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
+            try
+            {
+                var entity = users.GetUniqueData(id);
+                if (entity == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User id " + id + " not found to delete");
+                }
+                else
+                {
+                    users.DeleteRecord(id);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
     }
 }

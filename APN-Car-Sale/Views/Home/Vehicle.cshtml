@@ -4,84 +4,121 @@
     ViewBag.Title = "Vehicle";
 }
 
-<h2>Vehicle</h2>
+<style>
+    .search-wrap-1 {
+        padding-top: 1em;
+        padding-bottom:0;
+    }
+</style>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Brand)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Model)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Edition)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ModelYear)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Mileage)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsNegotiate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ContactNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.HideNumber)
-        </th>
-        <th></th>
-    </tr>
+<script src="~/Template/js/jquery-3.2.1.min.js"></script>
+<script>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Brand)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Model)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Edition)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModelYear)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Mileage)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsNegotiate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ContactNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.HideNumber)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
 
-</table>
+        $("#searchItem").keyup(function () {            
+            var searchText = $("#searchItem").val().toLowerCase();            
+            $(".searchItem").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+          });
+    });
+
+    //var x = document.getElementById("demo");
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert( "Geolocation is not supported by this browser.");
+        }
+    }
+
+    function showPosition(position) {
+
+        alert("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
+        
+    }
+
+
+</script>
+
+<section class="ftco-section ftco-degree-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 order-md-last ftco-animate fadeInUp ftco-animated">
+                <section>
+                    <div class="container">
+                        <div class="row">                           
+
+                            <p id="demo"></p>
+                            <div class="sidebar-box">
+                                <form action="#" class="search-form">
+                                    <div class="form-group">
+                                        <span class="icon icon-search"></span>
+                                        <input type="text" id="searchItem" class="form-control" placeholder="Type a keyword and hit enter">
+                                    </div>
+                                </form>
+                            </div>
+
+                            @foreach (var item in Model)
+                            {
+                            <div class="col-md-3 searchItem">
+                                <div class="car-wrap ftco-animate fadeInUp ftco-animated">
+                                    <div class="img d-flex align-items-end" style="background-image: url(/Template/images/car-1.jpg);">
+                                        <div class="price-wrap d-flex">
+                                            <span class="rate">$25</span>
+                                            <p class="from-day">
+                                                <span>From</span>
+                                                <span>/Day</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="text p-4 text-center">
+                                        <h2 class="mb-0"><a href="car-single.html">@Html.DisplayFor(modelItem => item.Brand)</a></h2>
+                                        <span>@Html.DisplayFor(modelItem => item.Model)</span>
+                                        <p class="d-flex mb-0 d-block">
+                                            <a href="#" class="btn btn-black btn-outline-black ml-1">Details</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                            
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col text-center">
+                                <div class="block-27">
+                                    <ul>
+                                        <li><a href="#">&lt;</a></li>
+                                        <li class="active"><span>1</span></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">5</a></li>
+                                        <li><a href="#">&gt;</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div> <!-- .col-md-8 -->
+            <div class="col-md-3 sidebar ftco-animate fadeInUp ftco-animated">
+                
+                @Html.Partial("LeftSideBar");
+            </div>
+
+        </div>
+    </div>
+</section>

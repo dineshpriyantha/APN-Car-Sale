@@ -72,6 +72,7 @@
     <Compile Include="Models\APN_Category.cs" />
     <Compile Include="Models\APN_Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\FilesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\VehicleRepository.cs" />

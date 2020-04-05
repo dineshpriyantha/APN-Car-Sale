@@ -44,12 +44,41 @@ namespace APNCarSaleDataService.Repositories
 
         public APN_User GetUniqueData(int id)
         {
-            throw new NotImplementedException();
+            var user = users.FirstOrDefault(x => x.id == id);
+            return user;
         }
 
-        public void SaveData()
+        public void UpdateRecord(int id, APN_User user)
         {
-            throw new NotImplementedException();
+            SqlConnection conn = db.GetConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "Execute pr_ORA_UpdateUser @id,@name,@email,@phone";
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = user.name;
+            cmd.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = user.email;
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public void SaveData(APN_User user)
+        {
+            SqlConnection conn = db.GetConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "Execute pr_ORA_AddUser @name,@email,@phone";
+            cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = user.name;
+            cmd.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = user.email;
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
+
+        public void DeleteRecord(int id)
+        {
+            SqlConnection conn = db.GetConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "Execute pr_ORA_DeleteUer @id";
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
     }
 }

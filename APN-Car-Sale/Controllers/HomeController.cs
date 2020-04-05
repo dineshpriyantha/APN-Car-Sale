@@ -15,6 +15,8 @@ namespace APN_Car_Sale.Controllers
     [RoutePrefix("APNCar")]
     public class HomeController : Controller
     {
+        private string baseUrl = "http://localhost:1134/";
+
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
@@ -25,7 +27,6 @@ namespace APN_Car_Sale.Controllers
         [Route("ads")]
         public async Task<ActionResult> Vehicle()
         {
-            string baseUrl = "http://localhost:1134/";
             List<APN_Vehicle> vehicle = new List<APN_Vehicle>();
 
             using (var client = new HttpClient())
@@ -52,6 +53,18 @@ namespace APN_Car_Sale.Controllers
                 return View(vehicle);
             }
 
+        }
+
+        public async Task<ActionResult> PostAdd()
+        {
+
+
+            return View();
+        }
+
+        public ActionResult LeftSideBar()
+        {
+            return PartialView();
         }
     }
 }

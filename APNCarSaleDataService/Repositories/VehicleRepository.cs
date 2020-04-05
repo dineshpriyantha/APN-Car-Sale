@@ -51,7 +51,17 @@ namespace APNCarSaleDataService.Repositories
             throw new NotImplementedException();
         }
 
-        public void SaveData()
+        public void SaveData(APN_Vehicle entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteRecord(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateRecord(int id, APN_Vehicle entity)
         {
             throw new NotImplementedException();
         }

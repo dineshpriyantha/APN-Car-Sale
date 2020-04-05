@@ -8,9 +8,10 @@ namespace APNCarSaleDataService.Models
 {
     public class APN_Category
     {
-        public int CId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+
     }
 
     public class APN_SubCategory : APN_Category
