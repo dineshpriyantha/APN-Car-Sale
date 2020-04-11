@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace APNCarSaleDataService.Repositories
 {
-    class CategoryRepository : IRepository<APN_Category, int>
+    public class CategoryRepository : IRepository<APN_Category, int>
     {
         //APN user list
         private List<APN_Category> categorys = new List<APN_Category>();
@@ -22,7 +22,7 @@ namespace APNCarSaleDataService.Repositories
         public CategoryRepository()
         {
             SqlConnection conn = db.GetConnection();
-            SqlDataAdapter da = new SqlDataAdapter("pr_APN_LoadUser", conn);
+            SqlDataAdapter da = new SqlDataAdapter("pr_APN_LoadCategory", conn);
             da.SelectCommand.CommandType = CommandType.StoredProcedure;
             DataSet dat_set = new DataSet();
             da.Fill(dat_set);
@@ -52,20 +52,32 @@ namespace APNCarSaleDataService.Repositories
         {
             SqlConnection conn = db.GetConnection();
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Execute pr_ORA_AddUser @name,@email,@phone";
+            cmd.CommandText = "Execute pr_APN_AddCategory @name,@description";
             cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = category.name;
-            cmd.Parameters.Add("@email", SqlDbType.VarChar, 100).Value = category.description;
+            cmd.Parameters.Add("@description", SqlDbType.VarChar, 100).Value = category.description;
             cmd.ExecuteNonQuery();
             conn.Close();
         }
 
-        public void UpdateRecord(int id, APN_Category entity)
+        public void UpdateRecord(int id, APN_Category category)
         {
-            throw new NotImplementedException();
+            SqlConnection conn = db.GetConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "Execute pr_APN_UpdateCategory @id,@name,@description";
+            cmd.Parameters.Add("@id", SqlDbType.VarChar, 100).Value = id;
+            cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = category.name;
+            cmd.Parameters.Add("@description", SqlDbType.VarChar, 100).Value = category.description;
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
         public void DeleteRecord(int id)
         {
-            throw new NotImplementedException();
+            SqlConnection conn = db.GetConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "Execute pr_APN_DeleteCategory @id";
+            cmd.Parameters.Add("@id", SqlDbType.VarChar, 100).Value = id;
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
 
     }

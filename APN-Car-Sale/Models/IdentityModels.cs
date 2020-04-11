@@ -33,5 +33,7 @@ namespace APN_Car_Sale
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<APNCarSaleDataService.Models.APN_Category> APN_Category { get; set; }
     }
 }
