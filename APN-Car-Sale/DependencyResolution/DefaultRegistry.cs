@@ -39,6 +39,8 @@ namespace APN_Car_Sale.DependencyResolution
             For<IRepository<APN_User, int>>().Use<UserRepository>();
             For<IRepository<APN_Vehicle, int>>().Use<VehicleRepository>();
             For<IRepository<APN_Category, int>>().Use<CategoryRepository>();
+            For<IRepository<APN_UserMaster, int>>().Use<UserMasterRepository>();
+            For<IRepository<APN_SubCategory, int>>().Use<SubCategoryRepository>();
         }
 
         #endregion

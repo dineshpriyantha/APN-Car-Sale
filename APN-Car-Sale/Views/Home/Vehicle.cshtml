@@ -1,4 +1,5 @@
-﻿@model IEnumerable<APNCarSaleDataService.Models.APN_Vehicle>
+﻿@using APN_Car_Sale.Models;
+@model ViewModel
 
 @{
     ViewBag.Title = "Vehicle";
@@ -48,7 +49,30 @@
         alert("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
         
     }
+    
+    function loadSubCategory(id)
+    {
+        var url = "/Home/GetSubCategoryByCategoryId?cid=" + id;
+        var setData = $("#id-"+id);
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(JSON.stringify(data));
+                setData.html(" ");  
+                for(var i = 0; i < obj.length; i++ )
+                {
+                   var data = "<ol>" +
+                                "<li>"+ obj[i].SName+ "</li>" +
+                              "</ol>";
+                                      
+                   setData.append(data);             
+                   
+                }
 
+            }
+        })
+    }
 
 </script>
 
@@ -58,9 +82,8 @@
             <div class="col-md-9 order-md-last ftco-animate fadeInUp ftco-animated">
                 <section>
                     <div class="container">
-                        <div class="row">                           
+                        <div class="row">                       
 
-                            <p id="demo"></p>
                             <div class="sidebar-box">
                                 <form action="#" class="search-form">
                                     <div class="form-group">
@@ -70,25 +93,22 @@
                                 </form>
                             </div>
 
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.vehicles)
                             {
-                            <div class="col-md-3 searchItem">
+                            <div class="col-md-3 col-sm-3 col-xs-6 searchItem">
                                 <div class="car-wrap ftco-animate fadeInUp ftco-animated">
                                     <div class="img d-flex align-items-end" style="background-image: url(/Template/images/car-1.jpg);">
-                                        <div class="price-wrap d-flex">
-                                            <span class="rate">$25</span>
-                                            <p class="from-day">
-                                                <span>From</span>
-                                                <span>/Day</span>
-                                            </p>
-                                        </div>
+                                        
                                     </div>
-                                    <div class="text p-4 text-center">
+                                    <div class="text" style="padding:8px">
                                         <h2 class="mb-0"><a href="car-single.html">@Html.DisplayFor(modelItem => item.Brand)</a></h2>
                                         <span>@Html.DisplayFor(modelItem => item.Model)</span>
-                                        <p class="d-flex mb-0 d-block">
-                                            <a href="#" class="btn btn-black btn-outline-black ml-1">Details</a>
-                                        </p>
+
+                                        <span style="color:#adb2da">Address</span>
+
+                                        <div class="meta">
+                                            <div style="font-size: 12px;"><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,8 +136,55 @@
             </div> <!-- .col-md-8 -->
             <div class="col-md-3 sidebar ftco-animate fadeInUp ftco-animated">
                 
-                @Html.Partial("LeftSideBar");
+                @*@{ Html.RenderAction("LeftSideBar"); }*@
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated" style="border: 1px solid #adb2da;">
+
+                    <div class="categories">                        
+                        <h3>Categories</h3>
+                        @foreach (var item in Model.categories)
+                        {
+                            <li>
+                                <a href="#" data-toggle="collapse" data-target="#id-@item.id" onclick="loadSubCategory(@item.id)">@item.name<span id="subcount"></span></a>
+                                <div id="id-@item.id" class="collapse">
+                                    
+                                </div>
+                            </li>
+                        }
+                        <li><a href="#" onclick="getLocation()">GetNarest Vehicle <span>(140)</span></a></li>
+                        
+                    </div>
+                </div>
+                <br/>
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated" style="border: 1px solid #adb2da;">
+                    <h3>Recent Blog</h3>
+                    <div class="block-21 d-flex">                        
+                        <div class="text">
+                            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                            <div class="meta">
+                                <div><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
+                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
+                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3>Tag Cloud</h3>
+                    <div class="tagcloud">
+                        <a href="#" class="tag-cloud-link">dish</a>
+                        <a href="#" class="tag-cloud-link">menu</a>
+                        <a href="#" class="tag-cloud-link">food</a>
+                        <a href="#" class="tag-cloud-link">sweet</a>
+                        <a href="#" class="tag-cloud-link">tasty</a>
+                        <a href="#" class="tag-cloud-link">delicious</a>
+                        <a href="#" class="tag-cloud-link">desserts</a>
+                        <a href="#" class="tag-cloud-link">drinks</a>
+                    </div>
+                </div>
             </div>
+
+
 
         </div>
     </div>

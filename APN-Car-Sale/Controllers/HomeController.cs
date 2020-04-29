@@ -1,8 +1,10 @@
-﻿using APNCarSaleDataService.Interfaces;
+﻿using APN_Car_Sale.Models;
+using APNCarSaleDataService.Interfaces;
 using APNCarSaleDataService.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -27,7 +29,87 @@ namespace APN_Car_Sale.Controllers
         [Route("ads")]
         public async Task<ActionResult> Vehicle()
         {
-            List<APN_Vehicle> vehicle = new List<APN_Vehicle>();
+            IEnumerable<APN_Vehicle> vehicle = await GetVehicle();
+            IEnumerable<APN_Category> category = await GetCategory();
+            IEnumerable<APN_SubCategory> subcategory = await GetSubCategory();
+
+            ViewModel vModel = new ViewModel();
+            vModel.vehicles = vehicle;
+            vModel.categories = category;
+            vModel.subcategories = subcategory;
+
+            return View(vModel);
+        }
+
+        public async Task<ActionResult> PostAdd()
+        {
+            return View();
+        }
+
+        public PartialViewResult LeftSideBar()
+        {
+            return PartialView();
+        }
+
+        private async Task<IEnumerable<APN_Category>> GetCategory()
+        {
+            IEnumerable<APN_Category> categorys = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(String.Concat(baseUrl, "api/Category"));
+
+                var responseTask = client.GetAsync("Category");
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<APN_Category>>();
+                    readTask.Wait();
+
+                    categorys = readTask.Result;
+                }
+                else
+                {
+                    categorys = Enumerable.Empty<APN_Category>();
+                    ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+                }
+            }
+            return categorys;
+        }
+
+        private async Task<IEnumerable<APN_SubCategory>> GetSubCategory()
+        {
+            IEnumerable<APN_SubCategory> categorys = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(String.Concat(baseUrl, "api/GetSubCategory"));
+
+                var responseTask = client.GetAsync("SubCategoryAPI");
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<APN_SubCategory>>();
+                    readTask.Wait();
+
+                    categorys = readTask.Result;
+                }
+                else
+                {
+                    categorys = Enumerable.Empty<APN_SubCategory>();
+                    ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+                }
+            }
+            return categorys;
+        }
+
+        private async Task<IEnumerable<APN_Vehicle>> GetVehicle()
+        {
+            IEnumerable<APN_Vehicle> vehicle = null;
 
             using (var client = new HttpClient())
             {
@@ -50,21 +132,34 @@ namespace APN_Car_Sale.Controllers
 
                     vehicle = JsonConvert.DeserializeObject<List<APN_Vehicle>>(vehicles);
                 }
-                return View(vehicle);
             }
-
+            return vehicle;
         }
 
-        public async Task<ActionResult> PostAdd()
+        public JsonResult GetSubCategoryByCategoryId(int cid)
         {
+            IEnumerable<APN_SubCategory> apnCategory = null;
 
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(String.Concat(baseUrl, "api/SubCategoryAPI"));
+                var responseTask = client.GetAsync("SubCategoryAPI?cid=" + cid.ToString());
+                responseTask.Wait();
 
-            return View();
-        }
-
-        public ActionResult LeftSideBar()
-        {
-            return PartialView();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<APN_SubCategory>>();
+                    readTask.Wait();
+                    apnCategory = readTask.Result;
+                }
+                else
+                {
+                    apnCategory = null;
+                    ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+                }
+            }
+            return Json(apnCategory, JsonRequestBehavior.AllowGet);
         }
     }
 }

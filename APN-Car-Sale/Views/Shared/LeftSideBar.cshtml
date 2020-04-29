@@ -1,20 +1,14 @@
-﻿
+﻿@model IEnumerable<APNCarSaleDataService.Models.APN_Category>
+
+
 <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
 
     <div class="categories">
         <h3>Categories</h3>
-        <li><a href="#">Vehicles <span>(12)</span></a></li>
-        <li><a href="#">Electronics <span>(22)</span></a></li>
-        <li><a href="#">Business & Industry <span>(42)</span></a></li>
-        <li><a href="#">Kids <span>(14)</span></a></li>
-        <li><a href="#">Health & Beauty<span>(14)</span></a></li>
-        <li><a href="#">Jobs in Sri Lanka <span>(14)</span></a></li>
-        <li><a href="#">Services <span>(14)</span></a></li>
-        <li><a href="#">Education <span>(14)</span></a></li>
-        <li><a href="#">Foods <span>(14)</span></a></li>
-        <li><a href="#">Agriculture <span>(14)</span></a></li>
-        <li><a href="#">Sports <span>(14)</span></a></li>
-        <li><a href="#">Other <span>(14)</span></a></li>
+        @foreach (var item in Model)
+        {
+            <li><a href="#"> @item.name<span>(12)</span></a></li>
+        }       
         <li><a href="#" onclick="getLocation()">GetNarest Vehicle <span>(140)</span></a></li>
     </div>
 </div>

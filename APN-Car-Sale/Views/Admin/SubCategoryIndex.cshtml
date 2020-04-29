@@ -1,6 +1,6 @@
-﻿@model APNCarSaleDataService.Models.APN_Category
-
+﻿@model APNCarSaleDataService.Models.APN_SubCategory
 @{
+    ViewBag.Title = "SubCategoryIndex";
     Layout = "~/Views/Shared/Admin_Layout.cshtml";
 }
 
@@ -47,7 +47,8 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Sub Category</th>
                     <th>Description</th>
                     <th>(Edit)</th>
                     <th>(Delete)</th>
@@ -74,18 +75,25 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="form">
-                    <fieldset id="SubmitForm">
+                    <fieldset id="SubmitFormSub">
                         <div class="form-group">
-                            <label class="control-label col-sm-2" >Name</label>
+                            <label class="control-label col-sm-2">Category</label>
                             <div class="col-sm-10">
-                                @Html.HiddenFor(m => m.id, new { @id = "Id" })
-                                @Html.TextBoxFor(m => m.name, new { @id = "name", @class = "form-control", @placeholder = "Name*" })
+                                <select id="Cid" name="Cid" class="form-control"></select>
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="control-label col-sm-2" >Sub Ctegory Name</label>
+                            <div class="col-sm-10">
+                                @Html.HiddenFor(m => m.SId, new { @id = "SId" })                                
+                                @Html.TextBoxFor(m => m.SName, new { @id = "SName", @class = "form-control", @placeholder = "Name*" })
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
                             <label class="control-label col-sm-2" >Description</label>
                             <div class="col-sm-10">
-                                @Html.TextBoxFor(m => m.description, new { @id = "Email", @class = "form-control", @placeholder = "Description*" })
+                                @Html.TextBoxFor(m => m.SDescription, new { @id = "SDescription", @class = "form-control", @placeholder = "Description*" })
                             </div>
                         </div>
                         <div class="form-group">
@@ -123,17 +131,18 @@
 </div>
 <script>
     $("#LoadingStatus").html("Loading....");
-    $.get("/Admin/GetCategory", null, DataBind);
+    $.get("/Admin/GetSubCategory", null, DataBind);
     function DataBind(List) {
        //This Code For Receive All Data From Controller And Show It In Client Side
         var SetData = $("#SetList");
         for (var i = 0; i < List.length; i++) {
-            var Data = "<tr class='row_" + List[i].id + " searchItem'>" +
+            var Data = "<tr class='row_" + List[i].SId + " searchItem'>" +
                 "<td>" + List[i].name + "</td>" +
-                "<td>" + List[i].description + "</td>" +
-                "<td>" + "<a href='#' class='btn btn-warning' onclick='EditRecord(" + List[i].id + ")' ><span class='glyphicon glyphicon-edit'></span></a>" + "</td>" +
-                "<td>" + "<a href='#' class='btn btn-danger' onclick='DeleteRecord(" + List[i].id + ")'><span class='glyphicon glyphicon-trash'></span></a>" + "</td>" +
-                "<td>" + "<input type='checkbox' value=''> <a href='#' class='btn btn-success' onclick='AproveRecord(" + List[i].id + ")'><span class='glyphicon glyphicon-globe'></span></a>" + "</td>" +
+                "<td>" + List[i].SName + "</td>" +
+                "<td>" + List[i].SDescription + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-warning' onclick='EditRecord(" + List[i].SId + ")' ><span class='glyphicon glyphicon-edit'></span></a>" + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-danger' onclick='DeleteRecord(" + List[i].SId + ")'><span class='glyphicon glyphicon-trash'></span></a>" + "</td>" +
+                "<td>" + "<input type='checkbox' value=''> <a href='#' class='btn btn-success' onclick='AproveRecord(" + List[i].SId + ")'><span class='glyphicon glyphicon-globe'></span></a>" + "</td>" +
                 "</tr>";
             SetData.append(Data);
             $("#LoadingStatus").html(" ");
@@ -141,28 +150,40 @@
         }
     }
 
+    // load category data to dropdown list
+    $.get("/Admin/GetCategory", null, DataBindToDropDown);
+    function DataBindToDropDown(list)
+    {
+        var setData = $("#Cid");
+        var data = "<option value=" + 0 + ">" + "-- Select Category --" + "</option>";
+        setData.append(data);
+        for (var i = 0; i < list.length; i++) {
+            var data ="<option value=" + list[i].id + ">" + list[i].name + "</option>";
+            setData.append(data);
+        }
+    }
+
 
     //Show The Popup Modal For Add New
-
     function AddNewStudent(Id) {
         $("#form")[0].reset();
-        $("#Id").val(0);
+        $("#SId").val(0);
         $("#ModalTitle").html("Add New Category");
         $("#MyModal").modal();
     }
 
     $("#SaveRecord").click(function () {
-        var id = $("#Id").val();
-        var data = $("#SubmitForm").serialize();
+        var id = $("#SId").val();
+        var data = $("#SubmitFormSub").serialize();
         
         if (id > 0) {
             $.ajax({
                 type: "Post",
-                url: "/Admin/Update",
+                url: "/Admin/UpdateSubCategory",
                 data: data,
                 success: function (result) {
                     alert("Updated..");
-                    window.location.href = "/Admin/index";
+                    window.location.href = "/Admin/SubCategoryIndex";
                     $("#MyModel").modal("hide");
                 }
             })
@@ -170,11 +191,11 @@
         else {
             $.ajax({
                 type: "Post",
-                url: "/Admin/Create",
+                url: "/Admin/CreateSubCategory",
                 data: data,
                 success: function (result) {
                     alert("Success!..");
-                    window.location.href = "/Admin/index";
+                    window.location.href = "/Admin/SubCategoryIndex";
                     $("#MyModal").modal("hide");
 
                 }
@@ -185,32 +206,32 @@
     //Show The Popup Modal For Edit Record
 
     function EditRecord(id) {
-        var url = "/Admin/GetCategoryById?id=" + id;
+        var url = "/Admin/GetSubCategoryById?id=" + id;
         $("#ModalTitle").html("Update Category Record");
         $("#MyModal").modal();
         $.ajax({
             type: "GET",
             url: url,
             success: function (data) {
-
                 var obj = JSON.parse(JSON.stringify(data));
-                $("#Id").val(obj.id);
-                $("#name").val(obj.name);
-                $("#Email").val(obj.description);
-
+                $("#Cid").val(obj.Cid);
+                $("#SId").val(obj.SId);
+                $("#Id").val(obj.Id);
+                $("#SName").val(obj.SName);
+                $("#SDescription").val(obj.SDescription);
             }
         })
     }
     //Show The Popup Modal For DeleteComfirmation
     var DeleteRecord = function (Id) {
-        $("#Id").val(Id);
+        $("#SId").val(Id);
         $("#DeleteConfirmation").modal("show");
     }
     var ConfirmDelete = function () {
-        var Id = $("#Id").val();
+        var Id = $("#SId").val();
         $.ajax({
             type: "POST",
-            url: "/Admin/DeleteCategoryRecord?id=" + Id,
+            url: "/Admin/DeleteSubCategoryRecord?id=" + Id,
             success: function (result) {
                 $("#DeleteConfirmation").modal("hide");
                 $(".row_" + Id).remove();
