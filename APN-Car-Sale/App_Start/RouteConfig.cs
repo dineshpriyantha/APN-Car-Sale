@@ -13,15 +13,15 @@ namespace APN_Car_Sale
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                    name: "APNCar",
-                    url: "APNCar/ads",
-                    defaults: new
-                    {
-                        controller = "Home",
-                        action = "Vehicle"
-                    }
-                );
+            //routes.MapRoute(
+            //        name: "APNCar",
+            //        url: "APNCar/{action}",
+            //        defaults: new
+            //        {
+            //            controller = "Home",
+            //            action = "Vehicle"
+            //        }
+            //    );
 
             routes.MapRoute(
                 name: "Default",

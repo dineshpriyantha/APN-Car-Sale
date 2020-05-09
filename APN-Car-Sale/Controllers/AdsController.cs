@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,8 +15,8 @@ using System.Web.Mvc;
 
 namespace APN_Car_Sale.Controllers
 {
-    [RoutePrefix("APNCar")]
-    public class HomeController : Controller
+    //[RoutePrefix("APNCar")]
+    public class AdsController : Controller
     {
         private string baseUrl = "http://localhost:1134/";
 
@@ -26,7 +27,7 @@ namespace APN_Car_Sale.Controllers
             return View();
         }
 
-        [Route("ads")]
+        //[Route("ads")]
         public async Task<ActionResult> Vehicle()
         {
             IEnumerable<APN_Vehicle> vehicle = await GetVehicle();
@@ -41,9 +42,68 @@ namespace APN_Car_Sale.Controllers
             return View(vModel);
         }
 
-        public async Task<ActionResult> PostAdd()
+        public ActionResult PostAd()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult PostAd(APN_Vehicle vehicle)
+        {
+            IEnumerable<APN_Files> File = SaveFileDetails(vehicle.files, vehicle.Cid, vehicle.Subid);
+            vehicle.File = File;
+            vehicle.files = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(String.Concat(baseUrl, "api/APN_Vehicle"));
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var resTask = client.PostAsJsonAsync<APN_Vehicle>("APN_Vehicle", vehicle);
+                resTask.Wait();
+
+                var result = resTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("SubCategoryIndex");
+                }
+
+                return View(vehicle);
+            }
+        }
+
+        public ActionResult ad()
+        {
+            return View();
+        }
+
+        public List<APN_Files> SaveFileDetails(IEnumerable<HttpPostedFileBase> files, int Cid, int Sid)
+        {
+            List<APN_Files> fileLst = new List<APN_Files>();
+
+            foreach (var item in files)
+            {
+                fileLst.Add(new APN_Files
+                {
+                    Name = item.FileName,
+                    ContentType = item.ContentType,
+                    ImageBytes = ConvertToBytes(item),
+                    Cid = Cid,
+                    Sid = Sid
+                });
+
+            }
+            return fileLst;
+        }
+
+        public byte[] ConvertToBytes(HttpPostedFileBase file)
+        {
+            byte[] imageBytes = null;
+            BinaryReader reader = new BinaryReader(file.InputStream);
+            imageBytes = reader.ReadBytes((int)file.ContentLength);
+            return imageBytes;
         }
 
         public PartialViewResult LeftSideBar()

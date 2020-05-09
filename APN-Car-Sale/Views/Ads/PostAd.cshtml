@@ -1,0 +1,150 @@
+﻿@model APNCarSaleDataService.Models.APN_Vehicle
+
+
+@{
+    ViewBag.Title = "PostAd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    input[type="file"] {
+      display: block;
+    }
+    .imageThumb {
+      max-height: 125px;
+      max-width:125px;
+      padding: 1px;
+      cursor: pointer;
+    }
+    .pip {
+      display: inline-block;
+      margin: 10px 10px 0 0;
+    }
+    .remove {
+      display: block;
+      background: red;
+      border: 1px solid black;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      width:20px;
+    }
+    .remove:hover {
+      background: white;
+      color: black;
+    }
+</style>
+
+<script>
+    // load category data to dropdown list
+    $.get("/Admin/GetCategory", null, DataBindToDropDown);
+    function DataBindToDropDown(list) {
+        var setData = $("#Cid");
+        var data = "<option value=" + 0 + ">" + "-- Select Category --" + "</option>";
+        setData.append(data);
+        for (var i = 0; i < list.length; i++) {
+            var data = "<option value=" + list[i].id + ">" + list[i].name + "</option>";
+            setData.append(data);
+        }
+    }
+    
+    function loadSubCategory() {
+        var cid = $("#Cid").val();            
+        var url = "/Ads/GetSubCategoryByCategoryId?cid=" + cid;
+        var setData = $("#Subid");
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(JSON.stringify(data));
+                setData.html(" ");
+                var data = "<option value=" + 0 + ">" + "-- Select Sub Category --" + "</option>";
+                setData.append(data);
+                for (var i = 0; i < obj.length; i++) {
+                    var data = "<option value=" + obj[i].SId + ">" + obj[i].SName + "</option>";
+                    setData.append(data);
+
+                }
+
+            }
+        })
+    }
+
+    var fileList = [];
+    var deleteList = [];
+
+    function readURL() {
+        var input = document.querySelector('input[type="file"]');
+        var files = document.getElementById("ImgInp").files;
+        //for (var i = 0; i < files.length; i++) {
+        //    alert(files[i].name);
+        //}
+        if (files) {
+            var filesAmount = files.length;
+            fileList = Array.from(files);
+           
+            for (i = 0; i < files.length; i++)
+            {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+
+                    var file = e.target;
+                    $("<span class=\"pip\">" +
+                      "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+                      "<br/><span class=\"remove\">X</span>" +
+                      "</span>").insertAfter("#ImgInp");
+                    $(".remove").click(function () {
+                        $(this).parent(".pip").remove();
+                        
+                    });
+                }
+                reader.readAsDataURL(fileList[i]);
+            }
+        }
+
+        
+    }
+
+
+
+</script>
+<div class="container">    
+    <div class="row block-9 justify-content-center mb-5">        
+        <div class="col-lg-8 col-md-8" style="margin-top: 80px;">
+            @using (Html.BeginForm("PostAd","Ads", FormMethod.Post, new { @class= "request-form ftco-animate", @enctype = "multipart/form-data" })) {   
+                 <fieldset id="SubmitFormSub">
+                     <h2>Register</h2>
+                     <div class="form-group">
+                         <label for="" class="label">Select Category</label>
+                         <select id="Cid" name="Cid" class="form-control" onchange="loadSubCategory()"></select>
+                     </div>
+                     <div class="form-group">
+                         <label for="" class="label">Select SubCategory</label>
+                         <select id="Subid" name="Subid" class="form-control"></select>
+                     </div>
+                     <div class="form-group">
+                         <label for="" class="label">Add Photos</label>
+                         <label for="ImgInp" class="btn btn-primary btn-block btn-outlined">Seleccionar imagenes</label>
+                         @Html.TextBoxFor(c => c.files, new { id = "ImgInp", name = "ImgInp", @onchange = "readURL(this);", type = "file", multiple = "true", accept = "image/png, image/jpeg", style="display:none;" })
+                     </div>
+                     <div class="form-group">
+                         <label for="" class="label">Mileage</label>
+                         @Html.TextBoxFor(c => c.Mileage, new { @class = "form-control" })
+                     </div>
+                     <div class="form-group">
+                         <label for="" class="label">Email</label>
+                         <input type="text" class="form-control" placeholder="Eamil.">
+                     </div>
+                     <div class="form-group">
+                         <label for="" class="label">Password</label>
+                         <input type="text" class="form-control" placeholder="Password.">
+                     </div>
+                     <div class="form-group">
+                         <input type="submit" value="Register" class="btn btn-primary">
+                     </div>
+                     
+                     </fieldset>
+                    }
+        </div>
+    </div>
+</div>

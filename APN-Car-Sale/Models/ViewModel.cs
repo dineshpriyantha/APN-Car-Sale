@@ -11,5 +11,6 @@ namespace APN_Car_Sale.Models
         public IEnumerable<APN_Vehicle> vehicles { get; set; }
         public IEnumerable<APN_Category> categories { get; set; }
         public IEnumerable<APN_SubCategory> subcategories { get; set; }
+        public IEnumerable<HttpPostedFileBase> File { get; set; }
     }
 }

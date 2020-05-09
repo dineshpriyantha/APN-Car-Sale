@@ -255,7 +255,7 @@
     <Compile Include="Controllers\APN_UserController.cs" />
     <Compile Include="Controllers\APN_VehicleController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\AdsController.cs" />
     <Compile Include="Controllers\SubCategoryAPIController.cs" />
     <Compile Include="Controllers\UserMasterController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -281,6 +281,14 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\slider\css\demo.css" />
+    <Content Include="Content\slider\css\flexslider.css" />
+    <Content Include="Content\slider\img\kitchen_adventurer_caramel.jpg" />
+    <Content Include="Content\slider\img\kitchen_adventurer_cheesecake_brownie.jpg" />
+    <Content Include="Content\slider\img\kitchen_adventurer_donut.jpg" />
+    <Content Include="Content\slider\img\kitchen_adventurer_lemon.jpg" />
+    <Content Include="Content\slider\img\logo.png" />
+    <Content Include="Content\slider\js\jquery.flexslider.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -379,11 +387,11 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Ads\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Home.cshtml" />
-    <Content Include="Views\Home\Vehicle.cshtml" />
+    <Content Include="Views\Ads\Home.cshtml" />
+    <Content Include="Views\Ads\Vehicle.cshtml" />
     <Content Include="Views\Shared\LeftSideBar.cshtml" />
     <Content Include="Views\Shared\Admin_Layout.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
@@ -391,6 +399,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Admin\AdminLeftPanel.cshtml" />
     <Content Include="Views\Admin\SubCategoryIndex.cshtml" />
+    <Content Include="Views\Ads\PostAd.cshtml" />
+    <Content Include="Views\Ads\ad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

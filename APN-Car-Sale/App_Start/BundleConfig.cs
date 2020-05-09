@@ -42,6 +42,7 @@ namespace APN_Car_Sale
                         "~/Template/js/jquery.timepicker.min.js",
                         "~/Template/js/scrollax.min.js",
                         //"~/Template/js/google-map.js",
+                        "~/Content/slider/js/jquery.flexslider.js",
                         "~/Template/js/main.js"
                         ));
 
@@ -57,6 +58,8 @@ namespace APN_Car_Sale
                         "~/Template/css/jquery.timepicker.css",
                         "~/Template/css/flaticon.css",
                         "~/Template/css/icomoon.css",
+                        "~/Content/slider/css/flexslider.css",
+                        "~/Content/slider/css/demo.css",
                         "~/Template/css/style.css"
                 ));
         }

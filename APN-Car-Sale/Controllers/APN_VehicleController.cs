@@ -11,11 +11,11 @@ namespace APN_Car_Sale.Controllers
 {
     public class APN_VehicleController : ApiController
     {
-        private IRepository<APN_Vehicle, int> vehicle;
+        private IRepository<APN_Vehicle, int> vehicles;
 
         public APN_VehicleController(IRepository<APN_Vehicle, int> vehicle)
         {
-            this.vehicle = vehicle;
+            this.vehicles = vehicle;
         }
 
         /// <summary>
@@ -24,9 +24,21 @@ namespace APN_Car_Sale.Controllers
         /// <returns></returns>
         public HttpResponseMessage Get()
         {
-            IEnumerable<APN_Vehicle> vehicleList = vehicle.GetAllData();
+            IEnumerable<APN_Vehicle> vehicleList = vehicles.GetAllData();
             return Request.CreateResponse(HttpStatusCode.OK, vehicleList);
         }
-
+        // POST: api/APN_Vehicle
+        public HttpResponseMessage Post([FromBody]APN_Vehicle vehicle)
+        {
+            try
+            {
+                vehicles.SaveData(vehicle);
+                return Request.CreateResponse(HttpStatusCode.Created, vehicle.Model);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
     }
 }

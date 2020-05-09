@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace APNCarSaleDataService.Models
 {
@@ -22,6 +23,10 @@ namespace APNCarSaleDataService.Models
         public bool IsNegotiate { get; set; }
         public string ContactNumber { get; set; }
         public bool HideNumber { get; set; }
+        public IEnumerable<HttpPostedFileBase> files { get; set; }
+        public int Cid { get; set; }
+        public int Subid { get; set; }
+        public IEnumerable<APN_Files> File { get; set; }
     }
 
     /// <summary>

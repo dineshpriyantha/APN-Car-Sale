@@ -10,6 +10,14 @@
         padding-top: 1em;
         padding-bottom:0;
     }
+    a {
+    text-decoration: none;
+    }
+    a:hover {
+    text-decoration: underline;
+    }
+
+
 </style>
 
 <script src="~/Template/js/jquery-3.2.1.min.js"></script>
@@ -50,9 +58,18 @@
         
     }
     
+    // load category
+    $.get("/Admin/GetCategory", null, DataBind);
+    function DataBind(List) {
+        for (var i = 0; i < List.length; i++) { 
+            loadSubCategory(List[i].id)
+        }
+    }
+
+    // load subcategory by category id
     function loadSubCategory(id)
     {
-        var url = "/Home/GetSubCategoryByCategoryId?cid=" + id;
+        var url = "/Ads/GetSubCategoryByCategoryId?cid=" + id;
         var setData = $("#id-"+id);
         $.ajax({
             type: "GET",
@@ -63,7 +80,7 @@
                 for(var i = 0; i < obj.length; i++ )
                 {
                    var data = "<ol>" +
-                                "<li>"+ obj[i].SName+ "</li>" +
+                                "<li><a href='" + obj[i].SId + "' style='color:#fc983c'>" + obj[i].SName + "</a></li>" +
                               "</ol>";
                                       
                    setData.append(data);             
@@ -95,13 +112,13 @@
 
                             @foreach (var item in Model.vehicles)
                             {
-                            <div class="col-md-3 col-sm-3 col-xs-6 searchItem">
+                            <div class="col-md-3 col-sm-4 col-xs-6 searchItem">
                                 <div class="car-wrap ftco-animate fadeInUp ftco-animated">
                                     <div class="img d-flex align-items-end" style="background-image: url(/Template/images/car-1.jpg);">
                                         
                                     </div>
                                     <div class="text" style="padding:8px">
-                                        <h2 class="mb-0"><a href="car-single.html">@Html.DisplayFor(modelItem => item.Brand)</a></h2>
+                                        <h2 class="mb-0"><a href="/Ads/ad">@Html.DisplayFor(modelItem => item.Brand)</a></h2>
                                         <span>@Html.DisplayFor(modelItem => item.Model)</span>
 
                                         <span style="color:#adb2da">Address</span>
@@ -144,8 +161,8 @@
                         @foreach (var item in Model.categories)
                         {
                             <li>
-                                <a href="#" data-toggle="collapse" data-target="#id-@item.id" onclick="loadSubCategory(@item.id)">@item.name<span id="subcount"></span></a>
-                                <div id="id-@item.id" class="collapse">
+                                <a href="#" data-toggle="collapse" data-target="#id-@item.id" >@item.name<span id="subcount"></span></a>
+                                <div id="id-@item.id" class="collapse" style="padding-left: 20px;padding-top: 10px;">
                                     
                                 </div>
                             </li>
@@ -183,8 +200,6 @@
                     </div>
                 </div>
             </div>
-
-
 
         </div>
     </div>
