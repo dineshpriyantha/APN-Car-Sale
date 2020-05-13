@@ -39,7 +39,9 @@ namespace APNCarSaleDataService.Repositories
                           Description = DataRow.Field<string>("description"),
                           ContactNumber = DataRow.Field<string>("contactNumber"),
                           IsNegotiate = DataRow.Field<bool>("isNegotiate"),
-                          HideNumber = DataRow.Field<bool>("hideNumber")
+                          HideNumber = DataRow.Field<bool>("hideNumber"),
+                          Cid = DataRow.Field<int>("Cid"),
+                          Subid = DataRow.Field<int>("Subid")
                       }).ToList();
         }
 

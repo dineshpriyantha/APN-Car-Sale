@@ -2,6 +2,7 @@
 using APNCarSaleDataService.Interfaces;
 using APNCarSaleDataService.Models;
 using Newtonsoft.Json;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -28,19 +29,97 @@ namespace APN_Car_Sale.Controllers
         }
 
         //[Route("ads")]
-        public async Task<ActionResult> Vehicle()
+        public async Task<ActionResult> Vehicle(string sortOrder, string currentFilter, string searchString, int? page, int? PageSize, int? sid)
         {
             IEnumerable<APN_Vehicle> vehicle = await GetVehicle();
-            IEnumerable<APN_Category> category = await GetCategory();
-            IEnumerable<APN_SubCategory> subcategory = await GetSubCategory();
+            //IEnumerable<APN_Category> category = await GetCategory();
+            //IEnumerable<APN_SubCategory> subcategory = await GetSubCategory();
 
-            ViewModel vModel = new ViewModel();
-            vModel.vehicles = vehicle;
-            vModel.categories = category;
-            vModel.subcategories = subcategory;
+            //ViewModel vModel = new ViewModel();
+            //vModel.vehicles = vehicle;
+            //vModel.categories = category;
+            //vModel.subcategories = subcategory;
 
-            return View(vModel);
+            // Not sure here
+            if (searchString == null)
+            {
+                searchString = currentFilter;
+            }
+
+            // Pass filtering string to view in order to maintain filtering when paging
+            ViewBag.CurrentFilter = searchString;
+
+            var vehicles = from u in vehicle select u;
+
+            // filtering
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                vehicles = vehicles.Where(u => (String.Equals(u.Brand, searchString, StringComparison.OrdinalIgnoreCase))
+                                          || (String.Equals(u.Model, searchString, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            // filter by cid
+            if (sid > 0)
+            {
+                vehicles = vehicles.Where(u => u.Subid == sid);
+            }
+
+
+            // Populate DropDownList
+            ViewBag.PageSize = new List<SelectListItem>() {
+                new SelectListItem { Text = "10", Value = "10", Selected = true },
+                new SelectListItem { Text = "25", Value = "25" },
+                new SelectListItem { Text = "50", Value = "50" },
+                new SelectListItem { Text = "100", Value = "100" }
+            };
+
+            int pageNumber = (page ?? 1);
+            int pageSize = (PageSize ?? 10);
+            ViewBag.psize = pageSize;
+
+            return View(vehicles.ToPagedList(pageNumber, pageSize));
         }
+
+        public async Task<JsonResult> getAllads(string txtSearch, int? page)
+        {
+            IEnumerable<APN_Vehicle> vehicle = await GetVehicle();
+
+            var data = (from s in vehicle select s);
+            if (!String.IsNullOrEmpty(txtSearch))
+            {
+                ViewBag.txtSearch = txtSearch;
+                data = data.Where(s => s.Brand.Contains(txtSearch));
+            }
+
+            if (page > 0)
+            {
+                page = page;
+            }
+            else
+            {
+                page = 1;
+            }
+            int pageSize = 3;
+            int start = (int)(page - 1) * pageSize;
+
+            ViewBag.pageCurrent = page;
+            int totalPage = data.Count();
+            float totalNumsize = (totalPage / (float)pageSize);
+            int numSize = (int)Math.Ceiling(totalNumsize);
+            ViewBag.numSize = numSize;
+            var dataPost = data.OrderByDescending(x => x.Id).Skip(start).Take(pageSize);
+            List<APN_Vehicle> nList = new List<APN_Vehicle>();
+            nList = dataPost.ToList();
+
+            return Json(new
+            {
+                data = nList,
+                pageCurrent = page,
+                numSize = numSize
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
 
         public ActionResult PostAd()
         {

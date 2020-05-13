@@ -1,5 +1,7 @@
-﻿@using APN_Car_Sale.Models;
-@model ViewModel
+﻿@*@using APN_Car_Sale.Models;
+@model ViewModel*@
+@model PagedList.IPagedList<APNCarSaleDataService.Models.APN_Vehicle>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Vehicle";
@@ -18,6 +20,7 @@
     }
 
 
+
 </style>
 
 <script src="~/Template/js/jquery-3.2.1.min.js"></script>
@@ -29,8 +32,8 @@
                 return true;
         }
 
-        $("#searchItem").keyup(function () {            
-            var searchText = $("#searchItem").val().toLowerCase();            
+        $("#searchItem").keyup(function () {
+            var searchText = $("#searchItem").val().toLowerCase();
             $(".searchItem").each(function () {
                 if (!Contains($(this).text().toLowerCase(), searchText)) {
                     $(this).hide();
@@ -55,17 +58,9 @@
     function showPosition(position) {
 
         alert("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
-        
-    }
-    
-    // load category
-    $.get("/Admin/GetCategory", null, DataBind);
-    function DataBind(List) {
-        for (var i = 0; i < List.length; i++) { 
-            loadSubCategory(List[i].id)
-        }
-    }
 
+    }  
+   
     // load subcategory by category id
     function loadSubCategory(id)
     {
@@ -76,22 +71,47 @@
             url: url,
             success: function (data) {
                 var obj = JSON.parse(JSON.stringify(data));
-                setData.html(" ");  
+                setData.html(" ");
                 for(var i = 0; i < obj.length; i++ )
                 {
                    var data = "<ol>" +
-                                "<li><a href='" + obj[i].SId + "' style='color:#fc983c'>" + obj[i].SName + "</a></li>" +
+                                "<li><a href='Vehicle?sid=" + obj[i].SId + "' style='color:#fc983c'>" + obj[i].SName + "</a></li>" +
                               "</ol>";
-                                      
-                   setData.append(data);             
-                   
+
+                   setData.append(data);
+
                 }
 
             }
         })
     }
 
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+
+    // load category
+    $.get("/Admin/GetCategory", null, DataBind);
+    function DataBind(List) {
+        //This Code For Receive All Data From Controller And Show It In Client Side
+        var SetData = $("#category");
+        for (var i = 0; i < List.length; i++) {
+
+            var data = "<li>"+
+                         "<a href='#' data-toggle='collapse' data-target=#id-" + List[i].id + " >" + List[i].name + "<span id='subcount'></span></a>" +
+                         "<div id=id-" + List[i].id + " class='collapse' style='padding-left: 20px;padding-top: 10px;'>" +
+                         "</div>"
+                       "</li>";
+            SetData.append(data);
+            loadSubCategory(List[i].id)
+
+        }
+    }
 </script>
+
+
 
 <section class="ftco-section ftco-degree-bg">
     <div class="container">
@@ -100,50 +120,71 @@
                 <section>
                     <div class="container">
                         <div class="row">                       
+                            <div class="topnav">
+                                <a class="active" href="#home">Home</a>
+                                <a href="#about">About</a>
+                                <a href="#contact">Contact</a>
+                                <div class="search-container">
+                                    @using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "filterForm" }))
+                                    {
+                                        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Search.." })                                       
+                                        <button type="submit"><i class="fa fa-search"></i></button>
+                                    }                                 
+                                </div>
 
-                            <div class="sidebar-box">
-                                <form action="#" class="search-form">
-                                    <div class="form-group">
-                                        <span class="icon icon-search"></span>
-                                        <input type="text" id="searchItem" class="form-control" placeholder="Type a keyword and hit enter">
-                                    </div>
-                                </form>
                             </div>
+                            
+                            
+                                @foreach (var item in Model)
+                                {
 
-                            @foreach (var item in Model.vehicles)
-                            {
-                            <div class="col-md-3 col-sm-4 col-xs-6 searchItem">
-                                <div class="car-wrap ftco-animate fadeInUp ftco-animated">
-                                    <div class="img d-flex align-items-end" style="background-image: url(/Template/images/car-1.jpg);">
-                                        
-                                    </div>
-                                    <div class="text" style="padding:8px">
-                                        <h2 class="mb-0"><a href="/Ads/ad">@Html.DisplayFor(modelItem => item.Brand)</a></h2>
-                                        <span>@Html.DisplayFor(modelItem => item.Model)</span>
+                                    <div class="col-md-3 col-sm-4 col-xs-6 searchItem">
+                                        <div class="car-wrap ftco-animate fadeInUp ftco-animated">
+                                            <div class="img d-flex align-items-end" style="background-image: url(/Template/images/car-1.jpg);">
 
-                                        <span style="color:#adb2da">Address</span>
+                                            </div>
+                                            <div class="text" style="padding:8px">
+                                                <h2 class="mb-0"><a href="/Ads/ad">@Html.DisplayFor(modelItem => item.Brand)</a></h2>
+                                                <span>@Html.DisplayFor(modelItem => item.Model)</span>
 
-                                        <div class="meta">
-                                            <div style="font-size: 12px;"><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
+                                                <span style="color:#adb2da">Address</span>
+
+                                                <div class="meta">
+                                                    <div style="font-size: 12px;"><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                }
+                                
                             </div>
-                            }
-                            
-                        </div>
+
                         <div class="row mt-5">
                             <div class="col text-center">
-                                <div class="block-27">
-                                    <ul>
-                                        <li><a href="#">&lt;</a></li>
-                                        <li class="active"><span>1</span></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li><a href="#">&gt;</a></li>
-                                    </ul>
+                                <div class="block-27">                                    
+                                    <!-- Paging -->
+                                    @using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "pageSizeForm" }))
+                                    {
+                                        <div class="pager">
+                                            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) sur @Model.PageCount<br />
+
+                                            @Model.Count of @Model.TotalItemCount elements
+
+                                            @Html.PagedListPager(Model, page => Url.Action("Vehicle", new
+                                           {
+                                               page,
+                                               sortOrder = ViewBag.CurrentSort,
+                                               currentFilter = ViewBag.CurrentFilter,
+                                               searchString = ViewBag.CurrentFilter,
+                                               pageSize = ViewBag.psize
+                                           }))
+
+                                            <!-- DropDownList for setting page size -->
+                                            Elements per page :
+                                            @Html.DropDownList("pageSize")
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -157,18 +198,11 @@
                 <div class="sidebar-box ftco-animate fadeInUp ftco-animated" style="border: 1px solid #adb2da;">
 
                     <div class="categories">                        
-                        <h3>Categories</h3>
-                        @foreach (var item in Model.categories)
-                        {
-                            <li>
-                                <a href="#" data-toggle="collapse" data-target="#id-@item.id" >@item.name<span id="subcount"></span></a>
-                                <div id="id-@item.id" class="collapse" style="padding-left: 20px;padding-top: 10px;">
-                                    
-                                </div>
-                            </li>
-                        }
-                        <li><a href="#" onclick="getLocation()">GetNarest Vehicle <span>(140)</span></a></li>
-                        
+                        <h3>Categories</h3>                        
+                        <div id="category">
+
+                        </div>
+                        <li><a href="#" onclick="getLocation()">GetNarest Vehicle <span>(140)</span></a></li>                        
                     </div>
                 </div>
                 <br/>
@@ -204,3 +238,5 @@
         </div>
     </div>
 </section>
+
+
