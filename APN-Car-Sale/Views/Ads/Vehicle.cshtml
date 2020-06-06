@@ -24,94 +24,6 @@
 </style>
 
 <script src="~/Template/js/jquery-3.2.1.min.js"></script>
-<script>
-
-    $(document).ready(function () {
-        function Contains(text_one, text_two) {
-            if (text_one.indexOf(text_two) != -1)
-                return true;
-        }
-
-        $("#searchItem").keyup(function () {
-            var searchText = $("#searchItem").val().toLowerCase();
-            $(".searchItem").each(function () {
-                if (!Contains($(this).text().toLowerCase(), searchText)) {
-                    $(this).hide();
-                }
-                else {
-                    $(this).show();
-                }
-            });
-          });
-    });
-
-    //var x = document.getElementById("demo");
-
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            alert( "Geolocation is not supported by this browser.");
-        }
-    }
-
-    function showPosition(position) {
-
-        alert("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
-
-    }  
-   
-    // load subcategory by category id
-    function loadSubCategory(id)
-    {
-        var url = "/Ads/GetSubCategoryByCategoryId?cid=" + id;
-        var setData = $("#id-"+id);
-        $.ajax({
-            type: "GET",
-            url: url,
-            success: function (data) {
-                var obj = JSON.parse(JSON.stringify(data));
-                setData.html(" ");
-                for(var i = 0; i < obj.length; i++ )
-                {
-                   var data = "<ol>" +
-                                "<li><a href='Vehicle?sid=" + obj[i].SId + "' style='color:#fc983c'>" + obj[i].SName + "</a></li>" +
-                              "</ol>";
-
-                   setData.append(data);
-
-                }
-
-            }
-        })
-    }
-
-    $(function () { // Submit pageSizeForm when another pageSize value is selected
-        $("#pageSize").change(function () {
-            $("#pageSizeForm").submit();
-        });
-    });
-
-    // load category
-    $.get("/Admin/GetCategory", null, DataBind);
-    function DataBind(List) {
-        //This Code For Receive All Data From Controller And Show It In Client Side
-        var SetData = $("#category");
-        for (var i = 0; i < List.length; i++) {
-
-            var data = "<li>"+
-                         "<a href='#' data-toggle='collapse' data-target=#id-" + List[i].id + " >" + List[i].name + "<span id='subcount'></span></a>" +
-                         "<div id=id-" + List[i].id + " class='collapse' style='padding-left: 20px;padding-top: 10px;'>" +
-                         "</div>"
-                       "</li>";
-            SetData.append(data);
-            loadSubCategory(List[i].id)
-
-        }
-    }
-</script>
-
-
 
 <section class="ftco-section ftco-degree-bg">
     <div class="container">
@@ -119,23 +31,28 @@
             <div class="col-md-9 order-md-last ftco-animate fadeInUp ftco-animated">
                 <section>
                     <div class="container">
-                        <div class="row">                       
+                                              
                             <div class="topnav">
                                 <a class="active" href="#home">Home</a>
                                 <a href="#about">About</a>
                                 <a href="#contact">Contact</a>
                                 <div class="search-container">
-                                    @using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "filterForm" }))
+                                    @*@using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "filterForm" }))
                                     {
                                         @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Search.." })                                       
                                         <button type="submit"><i class="fa fa-search"></i></button>
-                                    }                                 
+                                    }*@    
+                                    <input type="text" name="txtSearch" placeholder="Search.." class="txtSearch" />
+                                    @*<button type="button" class="btn btn-warning" id="search">Search</button>*@  
+                                    <button type="submit" id="search"><i class="fa fa-search"></i></button>                           
                                 </div>
 
                             </div>
                             
-                            
-                                @foreach (var item in Model)
+                            <div class="row load-list">
+
+                            </div>
+                                @*@foreach (var item in Model)
                                 {
 
                                     <div class="col-md-3 col-sm-4 col-xs-6 searchItem">
@@ -156,15 +73,21 @@
                                         </div>
                                     </div>
 
-                                }
+                                }*@
                                 
-                            </div>
+                            
 
                         <div class="row mt-5">
                             <div class="col text-center">
-                                <div class="block-27">                                    
+                                <div class="block-27">
+                                    
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination" id="load-pagination"></ul>
+                                    </nav>
+                                    
+                                                                     
                                     <!-- Paging -->
-                                    @using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "pageSizeForm" }))
+                                    @*@using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "pageSizeForm" }))
                                     {
                                         <div class="pager">
                                             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) sur @Model.PageCount<br />
@@ -180,11 +103,11 @@
                                                pageSize = ViewBag.psize
                                            }))
 
-                                            <!-- DropDownList for setting page size -->
+                                          
                                             Elements per page :
                                             @Html.DropDownList("pageSize")
                                         </div>
-                                    }
+                                    }*@
                                 </div>
                             </div>
                         </div>

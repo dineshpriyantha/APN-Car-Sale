@@ -80,7 +80,7 @@ namespace APN_Car_Sale.Controllers
             return View(vehicles.ToPagedList(pageNumber, pageSize));
         }
 
-        public async Task<JsonResult> getAllads(string txtSearch, int? page)
+        public async Task<JsonResult> getAllads(string txtSearch, int? page, int? sid)
         {
             IEnumerable<APN_Vehicle> vehicle = await GetVehicle();
 
@@ -88,18 +88,28 @@ namespace APN_Car_Sale.Controllers
             if (!String.IsNullOrEmpty(txtSearch))
             {
                 ViewBag.txtSearch = txtSearch;
-                data = data.Where(s => s.Brand.Contains(txtSearch));
+                data = data.Where(s => (String.Equals(s.Brand, txtSearch, StringComparison.OrdinalIgnoreCase))
+                                        || (String.Equals(s.Model, txtSearch, StringComparison.OrdinalIgnoreCase)));
+            }
+            if (sid == -1)
+            {
+                CommonProperty.CommonProperty.subId = 0;
             }
 
-            if (page > 0)
+            // filter by sid
+            if (sid > 0)
             {
-                page = page;
+                CommonProperty.CommonProperty.subId = sid;
             }
-            else
+
+            if (CommonProperty.CommonProperty.subId > 0)
+                data = data.Where(u => u.Subid == CommonProperty.CommonProperty.subId);
+
+            if (page == null)
             {
-                page = 1;
+                page = 0;
             }
-            int pageSize = 3;
+            int pageSize = 5;
             int start = (int)(page - 1) * pageSize;
 
             ViewBag.pageCurrent = page;
@@ -120,7 +130,7 @@ namespace APN_Car_Sale.Controllers
 
         }
 
-
+        [Authorize]
         public ActionResult PostAd()
         {
             return View();

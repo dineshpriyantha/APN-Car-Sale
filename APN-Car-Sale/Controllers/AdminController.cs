@@ -11,10 +11,12 @@ using System.Web.Mvc;
 
 namespace APN_Car_Sale.Controllers
 {
+    //[Authorize]
     public class AdminController : Controller
     {
         private string baseUrl = "http://localhost:1134/";
 
+        [Authorize]
         // GET: Admin        
         public ActionResult Index()
         {
@@ -22,6 +24,7 @@ namespace APN_Car_Sale.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Create(APN_Category category)
         {
             using (var client = new HttpClient())
@@ -45,6 +48,7 @@ namespace APN_Car_Sale.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Update(APN_Category category)
         {
             using (var client = new HttpClient())
@@ -124,6 +128,7 @@ namespace APN_Car_Sale.Controllers
             return Json(apnCategory, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
         public JsonResult DeleteCategoryRecord(int id)
         {
             bool result = false;
@@ -149,6 +154,7 @@ namespace APN_Car_Sale.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
         public ActionResult AdminLeftPanel()
         {
             return PartialView();
@@ -190,6 +196,7 @@ namespace APN_Car_Sale.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult CreateSubCategory(APN_SubCategory category)
         {
             using (var client = new HttpClient())
@@ -212,6 +219,7 @@ namespace APN_Car_Sale.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult UpdateSubCategory(APN_SubCategory category)
         {
             using (var client = new HttpClient())
@@ -262,7 +270,7 @@ namespace APN_Car_Sale.Controllers
             }
             return Json(apnCategory, JsonRequestBehavior.AllowGet);
         }
-
+        [Authorize]
         public JsonResult DeleteSubCategoryRecord(int id)
         {
             bool result = false;

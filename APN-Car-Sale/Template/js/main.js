@@ -1,6 +1,6 @@
  AOS.init({
- 	duration: 800,
- 	easing: 'slide'
+	duration: 800,
+	easing: 'slide'
  });
 
 (function($) {
@@ -185,8 +185,8 @@
 						console.log(num);
 					$this.animateNumber(
 					  {
-					    number: num,
-					    numberStep: comma_separator_number_step
+						number: num,
+						numberStep: comma_separator_number_step
 					  }, 7000
 					);
 				});
@@ -239,19 +239,19 @@
 	// navigation
 	var OnePageNav = function() {
 		$(".smoothscroll[href^='#'], #ftco-nav ul li a[href^='#']").on('click', function(e) {
-		 	e.preventDefault();
+			e.preventDefault();
 
-		 	var hash = this.hash,
-		 			navToggler = $('.navbar-toggler');
-		 	$('html, body').animate({
-		    scrollTop: $(hash).offset().top
+			var hash = this.hash,
+					navToggler = $('.navbar-toggler');
+			$('html, body').animate({
+			scrollTop: $(hash).offset().top
 		  }, 700, 'easeInOutExpo', function(){
-		    window.location.hash = hash;
+			window.location.hash = hash;
 		  });
 
 
 		  if ( navToggler.is(':visible') ) {
-		  	navToggler.click();
+			navToggler.click();
 		  }
 		});
 		$('body').on('activate.bs.scrollspy', function () {
@@ -263,33 +263,33 @@
 
 	// magnific popup
 	$('.image-popup').magnificPopup({
-    type: 'image',
-    closeOnContentClick: true,
-    closeBtnInside: false,
-    fixedContentPos: true,
-    mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
-     gallery: {
-      enabled: true,
-      navigateByImgClick: true,
-      preload: [0,1] // Will preload 0 - before current, and 1 after the current image
-    },
-    image: {
-      verticalFit: true
-    },
-    zoom: {
-      enabled: true,
-      duration: 300 // don't foget to change the duration also in CSS
-    }
+	type: 'image',
+	closeOnContentClick: true,
+	closeBtnInside: false,
+	fixedContentPos: true,
+	mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
+	 gallery: {
+	  enabled: true,
+	  navigateByImgClick: true,
+	  preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+	},
+	image: {
+	  verticalFit: true
+	},
+	zoom: {
+	  enabled: true,
+	  duration: 300 // don't foget to change the duration also in CSS
+	}
   });
 
   $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
-    disableOn: 700,
-    type: 'iframe',
-    mainClass: 'mfp-fade',
-    removalDelay: 160,
-    preloader: false,
+	disableOn: 700,
+	type: 'iframe',
+	mainClass: 'mfp-fade',
+	removalDelay: 160,
+	preloader: false,
 
-    fixedContentPos: false
+	fixedContentPos: false
   });
 
 
@@ -305,3 +305,193 @@
 
 })(jQuery);
 
+
+
+$(document).ready(function () {
+	function Contains(text_one, text_two) {
+		if (text_one.indexOf(text_two) != -1)
+			return true;
+	}
+
+	$("#searchItem").keyup(function () {
+		var searchText = $("#searchItem").val().toLowerCase();
+		$(".searchItem").each(function () {
+			if (!Contains($(this).text().toLowerCase(), searchText)) {
+				$(this).hide();
+			}
+			else {
+				$(this).show();
+			}
+		});
+	});
+});
+
+//var x = document.getElementById("demo");
+
+function getLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(showPosition);
+	} else {
+		alert("Geolocation is not supported by this browser.");
+	}
+}
+
+function showPosition(position) {
+
+	alert("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
+
+}
+
+// load subcategory by category id
+function loadSubCategory(id) {
+	var url = "/Ads/GetSubCategoryByCategoryId?cid=" + id;
+	var setData = $("#id-" + id);
+	$.ajax({
+		type: "GET",
+		url: url,
+		success: function (data) {
+			var obj = JSON.parse(JSON.stringify(data));
+			setData.html(" ");
+			for (var i = 0; i < obj.length; i++) {
+				var data = "<ol>" +
+							 "<li><a href='#' onclick='load(" + obj[i].SId + ")' style='color:#fc983c'>" + obj[i].SName + "</a></li>" +
+						   "</ol>";
+
+				//$("#id-"+obj[i].SId).click(load(0, obj[i].SId));
+				setData.append(data);
+
+			}
+
+		}
+	})
+}
+
+$(function () { // Submit pageSizeForm when another pageSize value is selected
+	$("#pageSize").change(function () {
+		$("#pageSizeForm").submit();
+	});
+});
+
+// load category
+$.get("/Admin/GetCategory", null, DataBind);
+function DataBind(List) {
+	//This Code For Receive All Data From Controller And Show It In Client Side
+	var SetData = $("#category");
+	for (var i = 0; i < List.length; i++) {
+
+		var data = "<li>" +
+					 "<a href='#' data-toggle='collapse' data-target=#id-" + List[i].id + " >" + List[i].name + "<span id='subcount'></span></a>" +
+					 "<div id=id-" + List[i].id + " class='collapse' style='padding-left: 20px;padding-top: 10px;'>" +
+					 "</div>"
+		"</li>";
+		SetData.append(data);
+		loadSubCategory(List[i].id)
+
+	}
+}
+
+
+
+//function load pagination
+function load(sid, txtSearch, page) {
+
+	$.ajax({
+	    url: "/Ads/getAllads",
+		type: "GET",
+		data: { txtSearch: txtSearch, page: page, sid: sid },
+		dataType: 'json',
+		contentType: 'application/json;charset=utf-8',
+		success: function (result) {
+			var str = "";
+			$.each(result.data, function (index, value) {
+
+				str += "<div class='col-md-3 col-sm-6 col-xs-6 searchItem'>";
+				str += "<div class='car-wrap ftco-animate fadeInUp ftco-animated'>";
+				str += "<div class='img d-flex align-items-end' style='background-image: url(/Template/images/car-1.jpg);'>";
+
+				str += "</div>";
+				str += "<div class='text' style='padding:8px'>";
+				str += "<h2 class='mb-0'><a href='/Ads/ad'>" + value.Brand + "</a></h2>";
+				str += "<span>" + value.Model + "</span>";
+
+				str += "<span style='color:#adb2da'>Address</span>";
+
+				str += "<div class='meta'>";
+				str += "<div style='font-size: 12px;'><a href='#'><span class='icon-calendar'></span> July 12, 2018</a></div>";
+				str += "</div>";
+				str += "</div>";
+				str += "</div>";
+				str += "</div>";
+
+				//create pagination
+				var pagination_string = "";
+				var pageCurrent = result.pageCurrent;
+				var numSize = result.numSize;
+
+				//create button previous
+				if (pageCurrent > 1) {
+					var pagePrevious = pageCurrent - 1;
+					pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '><<</a></li>';
+				}
+
+				for (i = 1; i <= numSize; i++) {
+					if (i == pageCurrent) {
+						pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+					} else {
+						pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+					}
+				}
+
+				//create button next
+				if (pageCurrent > 0 && pageCurrent < numSize) {
+					var pageNext = pageCurrent + 1;
+					pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>>></a></li>';
+				}
+
+				//load pagination
+				$("#load-pagination").html(pagination_string);
+			});
+
+			//load str to class="load-list"
+			$(".load-list").html(str);
+		}
+	});
+}
+
+
+//click event pagination
+$("body").on("click", ".pagination li a", function (event) {
+	event.preventDefault();
+	var page = $(this).attr('data-page');
+
+	//load event pagination
+	var txtSearch = $(".txtSearch").val();
+	if (txtSearch != "") {
+		load(txtSearch, null, page)
+	}
+	else {
+		load(null, null, page);
+	}
+
+});
+
+
+
+
+$(document).ready(function () {
+
+	//click event search
+	$("#search").click(function () {
+
+		var txtSearch = $(".txtSearch").val();
+		if (txtSearch != "") {
+			load(null, txtSearch, 1)
+		}
+		else {
+			load(null, null, 1);
+		}
+
+	});
+	//load init
+	load(null, null, 1);
+});

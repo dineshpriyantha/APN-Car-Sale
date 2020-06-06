@@ -45,7 +45,7 @@ namespace APN_Car_Sale.Controllers
             try
             {
                 users.SaveData(user);
-                return Request.CreateResponse(HttpStatusCode.Created, user.name);
+                return Request.CreateResponse(HttpStatusCode.Created, user.FirstName);
             }
             catch (Exception ex)
             {
@@ -96,5 +96,7 @@ namespace APN_Car_Sale.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
+
+
     }
 }

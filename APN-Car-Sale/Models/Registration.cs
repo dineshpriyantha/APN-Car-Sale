@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace APNCarSaleDataService.Models
+namespace APN_Car_Sale.Models
 {
-    /// <summary>
-    /// APN User model
-    /// </summary>
-    public class APN_User
+    public partial class Registration
     {
         public int UserId { get; set; }
         [Required]
@@ -34,8 +30,11 @@ namespace APNCarSaleDataService.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         public string UserType { get; set; }
+        public int MyProperty { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public bool IsActive { get; set; }
         public string IPAddress { get; set; }
+
     }
+
 }

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<APNCarSaleDataService.Models.APN_IdentityRole>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+
+<div class="container" style="margin-top:3%">
+    <div class="col-md-3">
+        @Html.Partial("~/Views/Admin/AdminLeftPanel.cshtml")
+    </div>
+    <div class="col-md-9">
+        <h2>Roles Listing </h2>
+
+        @Html.ActionLink("Create New Role", "Create") | @Html.ActionLink("Manage User Role", "ManageUserRoles")
+        <hr />
+        <div>
+            @foreach (var role in Model)
+            {
+                <p>
+                    <strong>@role.Name | </strong>
+                    <span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleId=@role.Id" class="delLink" style="color:red;">Delete</a></span> |
+                    @Html.ActionLink("Edit", "Edit", new { roleId = @role.Id })
+                </p>
+            }
+        </div>
+    </div>
+    
+</div>
+
+       

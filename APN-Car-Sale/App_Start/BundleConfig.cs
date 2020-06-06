@@ -42,8 +42,8 @@ namespace APN_Car_Sale
                         "~/Template/js/jquery.timepicker.min.js",
                         "~/Template/js/scrollax.min.js",
                         //"~/Template/js/google-map.js",
-                        "~/Content/slider/js/jquery.flexslider.js",
-                        "~/Template/js/main.js"
+                        "~/Content/slider/js/jquery.flexslider.js"
+                        //"~/Template/js/main.js"
                         ));
 
             bundles.Add(new StyleBundle("~/Template/css").Include(

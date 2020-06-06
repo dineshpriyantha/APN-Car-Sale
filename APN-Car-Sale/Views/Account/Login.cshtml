@@ -1,4 +1,5 @@
-﻿
+﻿@model APNCarSaleDataService.Models.APN_User
+
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,15 +25,21 @@
             </div>
             <div class="col-lg-2 col"></div>
             <div class="col-lg-4 col-md-6 mt-0 mt-md-5">
-                <form action="#" class="request-form ftco-animate">
+                @using (@Html.BeginForm("Login","Account", FormMethod.Post, new { @class = "request-form ftco-animate" }))
+                {
+                @*<form action="#" class="request-form ftco-animate">*@
+                    @Html.ValidationSummary(true, "Login Failed, check details");
                     <h2>Login</h2>
                     <div class="form-group">
                         <label for="" class="label">Email</label>
-                        <input type="text" class="form-control" placeholder="Eamil.">
+                        @Html.TextBoxFor(u => u.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.Email)
+                        
                     </div>
                     <div class="form-group">
                         <label for="" class="label">Password</label>
-                        <input type="text" class="form-control" placeholder="Password.">
+                        @Html.TextBoxFor(u => u.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(u => u.Password)
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Loigin" class="btn btn-primary">
@@ -43,7 +50,8 @@
                     <div class="form-group">
                         <a href="~/Account/Register" class="btn btn-black btn-outline-black mr-1">Register</a>
                     </div>
-                </form>
+                @*</form>*@
+                }
             </div>
         </div>
     </div>
