@@ -380,7 +380,7 @@ function DataBind(List) {
 	for (var i = 0; i < List.length; i++) {
 
 		var data = "<li>" +
-					 "<a href='#' data-toggle='collapse' data-target=#id-" + List[i].id + " >" + List[i].name + "<span id='subcount'></span></a>" +
+					 "<a href='#' onclick='load(null, null, null, "+List[i].id+")' id=" + List[i].id + " data-toggle='collapse' data-target=#id-" + List[i].id + " >" + List[i].name + "<span id='subcount'></span></a>" +
 					 "<div id=id-" + List[i].id + " class='collapse' style='padding-left: 20px;padding-top: 10px;'>" +
 					 "</div>"
 		"</li>";
@@ -393,16 +393,18 @@ function DataBind(List) {
 
 
 //function load pagination
-function load(sid, txtSearch, page) {
-
+function load(sid, txtSearch, page, cid) {
+    //alert(cid);
 	$.ajax({
 	    url: "/Ads/getAllads",
 		type: "GET",
-		data: { txtSearch: txtSearch, page: page, sid: sid },
+		data: { txtSearch: txtSearch, page: page, sid: sid , cid: cid},
 		dataType: 'json',
 		contentType: 'application/json;charset=utf-8',
 		success: function (result) {
-			var str = "";
+		    var str = "";
+		    var numSize = "";
+		    $("#load-pagination").html(" ");
 			$.each(result.data, function (index, value) {
 
 				str += "<div class='col-md-3 col-sm-6 col-xs-6 searchItem'>";
@@ -426,30 +428,32 @@ function load(sid, txtSearch, page) {
 				//create pagination
 				var pagination_string = "";
 				var pageCurrent = result.pageCurrent;
-				var numSize = result.numSize;
+				numSize = result.numSize;
+				if (numSize >= 1) {
 
-				//create button previous
-				if (pageCurrent > 1) {
-					var pagePrevious = pageCurrent - 1;
-					pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '><<</a></li>';
+				    //create button previous
+				    if (pageCurrent > 1) {
+				        var pagePrevious = pageCurrent - 1;
+				        pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '><<</a></li>';
+				    }
+
+				    for (i = 1; i <= numSize; i++) {
+				        if (i == pageCurrent) {
+				            pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+				        } else {
+				            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+				        }
+				    }
+
+				    //create button next
+				    if (pageCurrent > 0 && pageCurrent < numSize) {
+				        var pageNext = pageCurrent + 1;
+				        pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>>></a></li>';
+				    }
+
+				    //load pagination
+				    $("#load-pagination").html(pagination_string);
 				}
-
-				for (i = 1; i <= numSize; i++) {
-					if (i == pageCurrent) {
-						pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
-					} else {
-						pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
-					}
-				}
-
-				//create button next
-				if (pageCurrent > 0 && pageCurrent < numSize) {
-					var pageNext = pageCurrent + 1;
-					pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>>></a></li>';
-				}
-
-				//load pagination
-				$("#load-pagination").html(pagination_string);
 			});
 
 			//load str to class="load-list"
@@ -467,10 +471,10 @@ $("body").on("click", ".pagination li a", function (event) {
 	//load event pagination
 	var txtSearch = $(".txtSearch").val();
 	if (txtSearch != "") {
-		load(txtSearch, null, page)
+		load(txtSearch, null, page, null)
 	}
 	else {
-		load(null, null, page);
+		load(null, null, page, null);
 	}
 
 });
@@ -485,13 +489,15 @@ $(document).ready(function () {
 
 		var txtSearch = $(".txtSearch").val();
 		if (txtSearch != "") {
-			load(null, txtSearch, 1)
+			load(null, txtSearch, 1, null)
 		}
 		else {
-			load(null, null, 1);
+			load(null, null, 1, null);
 		}
 
 	});
 	//load init
-	load(null, null, 1);
+	load(null, null, 1, null);
 });
+
+

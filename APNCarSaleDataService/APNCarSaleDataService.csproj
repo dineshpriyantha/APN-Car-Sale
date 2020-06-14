@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="DataAccess\DatabaseConnection.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Models\APN_Book.cs" />
     <Compile Include="Models\APN_ContactNumber.cs" />
     <Compile Include="Models\APN_IdentityRole.cs" />
     <Compile Include="Models\APN_User.cs" />

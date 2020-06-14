@@ -13,6 +13,7 @@ namespace APNCarSaleDataService.Models
         public int id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
+        public int? priority { get; set; }
     }
 
     public class APN_SubCategory

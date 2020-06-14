@@ -49,6 +49,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Priority</th>
                     <th>(Edit)</th>
                     <th>(Delete)</th>
                     <th>Aproval</th>
@@ -86,6 +87,12 @@
                             <label class="control-label col-sm-2" >Description</label>
                             <div class="col-sm-10">
                                 @Html.TextBoxFor(m => m.description, new { @id = "Email", @class = "form-control", @placeholder = "Description*" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Priority</label>
+                            <div class="col-sm-10">
+                                @Html.TextBoxFor(m => m.priority, new { @id = "priority", @class = "form-control", @placeholder = "priority*" })
                             </div>
                         </div>
                         <div class="form-group">
@@ -131,6 +138,7 @@
             var Data = "<tr class='row_" + List[i].id + " searchItem'>" +
                 "<td>" + List[i].name + "</td>" +
                 "<td>" + List[i].description + "</td>" +
+                "<td>" + List[i].priority + "</td>" +
                 "<td>" + "<a href='#' class='btn btn-warning' onclick='EditRecord(" + List[i].id + ")' ><span class='glyphicon glyphicon-edit'></span></a>" + "</td>" +
                 "<td>" + "<a href='#' class='btn btn-danger' onclick='DeleteRecord(" + List[i].id + ")'><span class='glyphicon glyphicon-trash'></span></a>" + "</td>" +
                 "<td>" + "<input type='checkbox' value=''> <a href='#' class='btn btn-success' onclick='AproveRecord(" + List[i].id + ")'><span class='glyphicon glyphicon-globe'></span></a>" + "</td>" +
@@ -197,6 +205,7 @@
                 $("#Id").val(obj.id);
                 $("#name").val(obj.name);
                 $("#Email").val(obj.description);
+                $("#priority").val(obj.priority);
 
             }
         })

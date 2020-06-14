@@ -1,0 +1,18 @@
+﻿[
+  {
+    "category": "Vehicle",
+    "url": "/Ads/VehiclePartialView"
+  },
+  {
+    "category": "Book",
+    "url": "/Ads/BookPartialView"
+  },
+  {
+    "category": "Ayurveda",
+    "url": "/Ads/AyurvedaPartialView"
+  },
+  {
+    "category": "Other",
+    "url": "/Ads/OtherPartialView"
+  }
+]

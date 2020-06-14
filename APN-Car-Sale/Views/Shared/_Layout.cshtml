@@ -12,7 +12,7 @@
 <body>
      <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light scrolled awake" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="~/Ads/Vehicle">APN<span>Product</span></a>
+            <a class="navbar-brand" href="~/">APN<span>Product</span></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
@@ -21,9 +21,9 @@
                 <ul class="navbar-nav ml-auto">
                     @if (Request.IsAuthenticated)
                     {
-                        <li class="nav-item"><a href="~/Ads/PostAd" class="nav-link">Post Your Add</a></li>
+                        <li class="nav-item"><a href="~/Ads/PostAd" class=" btn btn-primary">POST YOUR ADD</a></li>
                     }                    
-                    <li class="nav-item"><a href="#" onclick="load(-1)" class="nav-link">All ads</a></li>
+                    <li class="nav-item"><a href="~/Ads/Vehicle" class="nav-link">All ads</a></li>
                     @*<li class="nav-item active"><a href="~/Account/Login" class="nav-link">Login</a></li>*@
                     @if (Request.IsAuthenticated)
                     {

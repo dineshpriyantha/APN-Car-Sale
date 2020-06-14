@@ -80,7 +80,7 @@ namespace APN_Car_Sale.Controllers
             return View(vehicles.ToPagedList(pageNumber, pageSize));
         }
 
-        public async Task<JsonResult> getAllads(string txtSearch, int? page, int? sid)
+        public async Task<JsonResult> getAllads(string txtSearch, int? page, int? sid, int? cid)
         {
             IEnumerable<APN_Vehicle> vehicle = await GetVehicle();
 
@@ -91,7 +91,14 @@ namespace APN_Car_Sale.Controllers
                 data = data.Where(s => (String.Equals(s.Brand, txtSearch, StringComparison.OrdinalIgnoreCase))
                                         || (String.Equals(s.Model, txtSearch, StringComparison.OrdinalIgnoreCase)));
             }
-            if (sid == -1)
+
+            if (cid > 0)
+            {
+                data = data.Where(x => x.Cid == cid);
+            }
+
+            // reset static parameter when sid null
+            if (sid == null)
             {
                 CommonProperty.CommonProperty.subId = 0;
             }
@@ -101,6 +108,8 @@ namespace APN_Car_Sale.Controllers
             {
                 CommonProperty.CommonProperty.subId = sid;
             }
+
+
 
             if (CommonProperty.CommonProperty.subId > 0)
                 data = data.Where(u => u.Subid == CommonProperty.CommonProperty.subId);
@@ -137,7 +146,21 @@ namespace APN_Car_Sale.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostAd(APN_Vehicle vehicle)
+        public ActionResult PostAd(CommonViewModel model)
+        {
+            HttpResponseMessage result = null;
+            if (model.ModelName == "Vehicle")
+            {
+                result = PastDataVehicle(model.Vehicle);
+            }
+            if (result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("SubCategoryIndex");
+            }
+            return View(model);
+        }
+
+        public HttpResponseMessage PastDataVehicle(APN_Vehicle vehicle)
         {
             IEnumerable<APN_Files> File = SaveFileDetails(vehicle.files, vehicle.Cid, vehicle.Subid);
             vehicle.File = File;
@@ -154,12 +177,7 @@ namespace APN_Car_Sale.Controllers
 
                 var result = resTask.Result;
 
-                if (result.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("SubCategoryIndex");
-                }
-
-                return View(vehicle);
+                return result;
             }
         }
 
@@ -172,17 +190,20 @@ namespace APN_Car_Sale.Controllers
         {
             List<APN_Files> fileLst = new List<APN_Files>();
 
-            foreach (var item in files)
+            if (fileLst.Count > 0)
             {
-                fileLst.Add(new APN_Files
+                foreach (var item in files)
                 {
-                    Name = item.FileName,
-                    ContentType = item.ContentType,
-                    ImageBytes = ConvertToBytes(item),
-                    Cid = Cid,
-                    Sid = Sid
-                });
+                    fileLst.Add(new APN_Files
+                    {
+                        Name = item.FileName,
+                        ContentType = item.ContentType,
+                        ImageBytes = ConvertToBytes(item),
+                        Cid = Cid,
+                        Sid = Sid
+                    });
 
+                }
             }
             return fileLst;
         }
@@ -309,6 +330,16 @@ namespace APN_Car_Sale.Controllers
                 }
             }
             return Json(apnCategory, JsonRequestBehavior.AllowGet);
+        }
+
+        public PartialViewResult VehiclePartialView()
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult BookPartialView()
+        {
+            return PartialView();
         }
     }
 }

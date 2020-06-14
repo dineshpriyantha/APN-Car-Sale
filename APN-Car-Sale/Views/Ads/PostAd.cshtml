@@ -1,10 +1,10 @@
-﻿@model APNCarSaleDataService.Models.APN_Vehicle
+﻿@model APN_Car_Sale.Models.CommonViewModel
 
 @{
     ViewBag.Title = "PostAd";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<script src="~/Template/js/jquery-3.2.1.min.js"></script>
 <style>
     input[type="file"] {
       display: block;
@@ -46,9 +46,9 @@
             setData.append(data);
         }
     }
-    
-    function loadSubCategory() {
-        var cid = $("#Cid").val();            
+
+    function loadSubCategoryByPostad() {
+        var cid = $("#Cid").val();
         var url = "/Ads/GetSubCategoryByCategoryId?cid=" + cid;
         var setData = $("#Subid");
         $.ajax({
@@ -67,6 +67,7 @@
 
             }
         })
+        Template();
     }
 
     var fileList = [];
@@ -81,7 +82,7 @@
         if (files) {
             var filesAmount = files.length;
             fileList = Array.from(files);
-           
+
             for (i = 0; i < files.length; i++)
             {
                 var reader = new FileReader();
@@ -94,16 +95,43 @@
                       "</span>").insertAfter("#ImgInp");
                     $(".remove").click(function () {
                         $(this).parent(".pip").remove();
-                        
+
                     });
                 }
                 reader.readAsDataURL(fileList[i]);
             }
         }
 
-        
+
     }
 
+    function Template() {
+
+        var categ = $("#Cid option:selected").text();        
+        var tempData = "";
+        $("#Template").html("");
+
+        $.getJSON("/Infrastructure/CategoryTemplate.json", function (cat) {
+            var i = 0;
+            if (categ == cat[i].category) {
+                
+                $("#Template").html(tempData);
+
+                $.ajax({
+                    url: cat[i].url,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (result) {
+                        $('#Template').html(result);
+                    }
+                })
+                i++;
+
+            }
+
+        });       
+    }
 
 
 </script>
@@ -112,36 +140,30 @@
         <div class="col-lg-8 col-md-8" style="margin-top: 80px;">
             @using (Html.BeginForm("PostAd","Ads", FormMethod.Post, new { @class= "request-form ftco-animate", @enctype = "multipart/form-data" })) {   
                  <fieldset id="SubmitFormSub">
-                     <h2>Register</h2>
-                     <div class="form-group">
-                         <label for="" class="label">Select Category</label>
-                         <select id="Cid" name="Cid" class="form-control" onchange="loadSubCategory()"></select>
-                     </div>
-                     <div class="form-group">
-                         <label for="" class="label">Select SubCategory</label>
-                         <select id="Subid" name="Subid" class="form-control"></select>
-                     </div>
-                     <div class="form-group">
-                         <label for="" class="label">Add Photos</label>
-                         <label for="ImgInp" class="btn btn-primary btn-block btn-outlined">Seleccionar imagenes</label>
-                         @Html.TextBoxFor(c => c.files, new { id = "ImgInp", name = "ImgInp", @onchange = "readURL(this);", type = "file", multiple = "true", accept = "image/png, image/jpeg", style="display:none;" })
-                     </div>
-                     <div class="form-group">
-                         <label for="" class="label">Mileage</label>
-                         @Html.TextBoxFor(c => c.Mileage, new { @class = "form-control" })
-                     </div>
-                     <div class="form-group">
-                         <label for="" class="label">Email</label>
-                         <input type="text" class="form-control" placeholder="Eamil.">
-                     </div>
-                     <div class="form-group">
-                         <label for="" class="label">Password</label>
-                         <input type="text" class="form-control" placeholder="Password.">
-                     </div>
-                     <div class="form-group">
-                         <input type="submit" value="Register" class="btn btn-primary">
-                     </div>
+                     <h2>Register</h2>                     
+                        <div class="form-group">
+                            <label for="" class="label">Select Category</label>
+                            <select id="Cid" name="Cid" class="form-control" onchange="loadSubCategoryByPostad()"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="label">Select SubCategory</label>
+                            <select id="Subid" name="Subid" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="label">Add Photos</label>
+                            <label for="ImgInp" class="btn btn-primary btn-block btn-outlined">Click to Select Images</label>
+                            @Html.TextBoxFor(c => c.files, new { id = "ImgInp", name = "ImgInp", @onchange = "readURL(this);", type = "file", multiple = "true", accept = "image/png, image/jpeg", style = "display:none;" })
+                        </div>                                        
+                     <div id="Template" class="row">
+
+                     </div>                     
                      
+                     <div class="form-group row">
+                         <div class="col-md-12">
+                             <input type="submit" value="Create" class="btn btn-primary" />
+                         </div>
+                     </div>
+
                      </fieldset>
                     }
         </div>

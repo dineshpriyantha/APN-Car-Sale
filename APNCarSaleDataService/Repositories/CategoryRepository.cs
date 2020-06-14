@@ -33,7 +33,8 @@ namespace APNCarSaleDataService.Repositories
                                 {
                                     id = DataRow.Field<int>("id"),
                                     name = DataRow.Field<string>("name"),
-                                    description = DataRow.Field<string>("description")
+                                    description = DataRow.Field<string>("description"),
+                                    priority = DataRow.Field<int>("priority")
                                 }).ToList();
         }
 
@@ -52,9 +53,10 @@ namespace APNCarSaleDataService.Repositories
         {
             SqlConnection conn = db.GetConnection();
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Execute pr_APN_AddCategory @name,@description";
+            cmd.CommandText = "Execute pr_APN_AddCategory @name,@description,@priority";
             cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = category.name;
             cmd.Parameters.Add("@description", SqlDbType.VarChar, 100).Value = category.description;
+            cmd.Parameters.Add("@priority", SqlDbType.Int).Value = category.priority;
             cmd.ExecuteNonQuery();
             conn.Close();
         }
@@ -63,10 +65,11 @@ namespace APNCarSaleDataService.Repositories
         {
             SqlConnection conn = db.GetConnection();
             SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "Execute pr_APN_UpdateCategory @id,@name,@description";
+            cmd.CommandText = "Execute pr_APN_UpdateCategory @id,@name,@description,@priority";
             cmd.Parameters.Add("@id", SqlDbType.VarChar, 100).Value = id;
             cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = category.name;
             cmd.Parameters.Add("@description", SqlDbType.VarChar, 100).Value = category.description;
+            cmd.Parameters.Add("@priority", SqlDbType.Int).Value = category.priority;
             cmd.ExecuteNonQuery();
             conn.Close();
         }

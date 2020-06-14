@@ -35,5 +35,7 @@ namespace APN_Car_Sale
         }
 
         public System.Data.Entity.DbSet<APNCarSaleDataService.Models.APN_Category> APN_Category { get; set; }
+
+        public System.Data.Entity.DbSet<APNCarSaleDataService.Models.APN_Vehicle> APN_Vehicle { get; set; }
     }
 }

@@ -19,11 +19,24 @@
     text-decoration: underline;
     }
 
+    a{
+    color:#000;
+    text-decoration:none;
+    }
 
 
-</style>
+    a.visited {
+        color:red;
+    }
+    </style>
 
 <script src="~/Template/js/jquery-3.2.1.min.js"></script>
+
+<script>
+    $('a').click(function () {
+        $(this).addClass("visited");
+    });
+</script>
 
 <section class="ftco-section ftco-degree-bg">
     <div class="container">
@@ -121,7 +134,7 @@
                 <div class="sidebar-box ftco-animate fadeInUp ftco-animated" style="border: 1px solid #adb2da;">
 
                     <div class="categories">                        
-                        <h3>Categories</h3>                        
+                        <h3>Categoriesss</h3>                        
                         <div id="category">
 
                         </div>
