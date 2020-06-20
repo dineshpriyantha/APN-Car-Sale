@@ -168,7 +168,7 @@ namespace APN_Car_Sale.Controllers
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(String.Concat(baseUrl, "api/APN_Vehicle"));
+                client.BaseAddress = new Uri(String.Concat(CommonProperty.CommonProperty.baseUrl, "api/APN_Vehicle"));
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

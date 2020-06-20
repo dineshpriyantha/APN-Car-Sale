@@ -11,5 +11,7 @@ namespace APN_Car_Sale.CommonProperty
         /// Sub category Id
         /// </summary>
         public static int? subId = 0;
+
+        public static string baseUrl = "http://localhost:1134/";
     }
 }
