@@ -257,6 +257,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Admin.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\APN_FileAPIController.cs" />
     <Compile Include="Controllers\APN_UserController.cs" />
     <Compile Include="Controllers\APN_VehicleController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -415,6 +416,7 @@
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Roles\ManageUserRoles.cshtml" />
     <Content Include="Views\Ads\VehiclePartialView.cshtml" />
+    <Content Include="Views\Ads\BookPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

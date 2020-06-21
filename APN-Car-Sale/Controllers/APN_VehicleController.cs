@@ -33,7 +33,7 @@ namespace APN_Car_Sale.Controllers
             try
             {
                 vehicles.SaveData(vehicle);
-                return Request.CreateResponse(HttpStatusCode.Created, vehicle.Model);
+                return Request.CreateResponse(HttpStatusCode.Created, vehicle.Brand);
             }
             catch (Exception ex)
             {

@@ -145,27 +145,52 @@ namespace APN_Car_Sale.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
-        public ActionResult PostAd(CommonViewModel model)
+        public ActionResult PostAd(CommonViewModel model, int Cid, int Subid)
         {
             HttpResponseMessage result = null;
             if (model.ModelName == "Vehicle")
             {
+                model.Vehicle.File = SaveFileDetails(model.files, Cid, Subid);
+                model.Vehicle.Cid = Cid;
+                model.Vehicle.Subid = Subid;
+                model.Vehicle.Email = User.Identity.Name;
+
                 result = PastDataVehicle(model.Vehicle);
             }
+            else if (model.ModelName == "Book")
+            {
+                result = PastDataBook(model.Vehicle);
+            }
+
             if (result.IsSuccessStatusCode)
             {
-                return RedirectToAction("SubCategoryIndex");
+                return RedirectToAction("PostAd");
             }
-            return View(model);
+            return View();
         }
+
+
+        public HttpResponseMessage PastDataBook(APN_Vehicle vehicle)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(String.Concat(CommonProperty.CommonProperty.baseUrl, "api/APN_Vehicle"));
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var resTask = client.PostAsJsonAsync<APN_Vehicle>("APN_Vehicle", vehicle);
+                resTask.Wait();
+
+                var result = resTask.Result;
+                return result;
+            }
+        }
+
 
         public HttpResponseMessage PastDataVehicle(APN_Vehicle vehicle)
         {
-            IEnumerable<APN_Files> File = SaveFileDetails(vehicle.files, vehicle.Cid, vehicle.Subid);
-            vehicle.File = File;
-            vehicle.files = null;
-
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(String.Concat(CommonProperty.CommonProperty.baseUrl, "api/APN_Vehicle"));
@@ -190,7 +215,7 @@ namespace APN_Car_Sale.Controllers
         {
             List<APN_Files> fileLst = new List<APN_Files>();
 
-            if (fileLst.Count > 0)
+            if (files != null)
             {
                 foreach (var item in files)
                 {
@@ -338,6 +363,11 @@ namespace APN_Car_Sale.Controllers
         }
 
         public PartialViewResult BookPartialView()
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult OtherView()
         {
             return PartialView();
         }

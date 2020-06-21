@@ -18,6 +18,7 @@ namespace APN_Car_Sale.Models
     public class CommonViewModel
     {
         public APN_Vehicle Vehicle { get; set; }
+        public APN_Book Book { get; set; }
         public string ModelName { get; set; }
         public IEnumerable<HttpPostedFileBase> files { get; set; }
         public IEnumerable<APN_Files> File { get; set; }

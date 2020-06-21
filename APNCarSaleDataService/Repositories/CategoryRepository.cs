@@ -18,10 +18,11 @@ namespace APNCarSaleDataService.Repositories
 
         //Db reference
         private DatabaseConnection db = new DatabaseConnection();
+        private SqlConnection conn;
 
         public CategoryRepository()
         {
-            SqlConnection conn = db.GetConnection();
+            conn = db.GetConnection();
             SqlDataAdapter da = new SqlDataAdapter("pr_APN_LoadCategory", conn);
             da.SelectCommand.CommandType = CommandType.StoredProcedure;
             DataSet dat_set = new DataSet();
@@ -51,7 +52,7 @@ namespace APNCarSaleDataService.Repositories
 
         public void SaveData(APN_Category category)
         {
-            SqlConnection conn = db.GetConnection();
+            conn.Open();
             SqlCommand cmd = conn.CreateCommand();
             cmd.CommandText = "Execute pr_APN_AddCategory @name,@description,@priority";
             cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = category.name;
@@ -63,7 +64,7 @@ namespace APNCarSaleDataService.Repositories
 
         public void UpdateRecord(int id, APN_Category category)
         {
-            SqlConnection conn = db.GetConnection();
+            conn.Open();
             SqlCommand cmd = conn.CreateCommand();
             cmd.CommandText = "Execute pr_APN_UpdateCategory @id,@name,@description,@priority";
             cmd.Parameters.Add("@id", SqlDbType.VarChar, 100).Value = id;
@@ -75,7 +76,7 @@ namespace APNCarSaleDataService.Repositories
         }
         public void DeleteRecord(int id)
         {
-            SqlConnection conn = db.GetConnection();
+            conn.Open();
             SqlCommand cmd = conn.CreateCommand();
             cmd.CommandText = "Execute pr_APN_DeleteCategory @id";
             cmd.Parameters.Add("@id", SqlDbType.VarChar, 100).Value = id;

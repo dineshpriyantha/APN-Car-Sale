@@ -19,9 +19,11 @@ namespace APNCarSaleDataService.Repositories
 
         private DatabaseConnection db = new DatabaseConnection();
 
+        private SqlConnection conn;
+
         public VehicleRepository()
         {
-            SqlConnection conn = db.GetConnection();
+            conn = db.GetConnection();
             SqlDataAdapter da = new SqlDataAdapter("pr_APN_LoadVehicle", conn);
             da.SelectCommand.CommandType = CommandType.StoredProcedure;
             DataSet ds = new DataSet();
@@ -57,16 +59,35 @@ namespace APNCarSaleDataService.Repositories
 
         public void SaveData(APN_Vehicle vehicle)
         {
-            foreach (var item in vehicle.File)
+            conn.Open();
+            SqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "Execute pr_APN_AddVehicle @brand,@model,@modelYear,@price,@description,@contactNumber,@isNegotiate,@hideNumber,@Cid,@Subid,@Email";
+            cmd.Parameters.Add("@brand", SqlDbType.VarChar, 50).Value = vehicle.Brand != null ? vehicle.Brand : "";
+            cmd.Parameters.Add("@model", SqlDbType.VarChar, 50).Value = vehicle.Model != null ? vehicle.Model : "";
+            cmd.Parameters.Add("@modelYear", SqlDbType.VarChar, 20).Value = vehicle.ModelYear != null ? vehicle.ModelYear : "";
+            cmd.Parameters.Add("@price", SqlDbType.VarChar, 20).Value = vehicle.Price != null ? vehicle.Price : "";
+            cmd.Parameters.Add("@description", SqlDbType.VarChar, -1).Value = vehicle.Description != null ? vehicle.Description : "";
+            cmd.Parameters.Add("@contactNumber", SqlDbType.VarChar, 20).Value = vehicle.ContactNumber != null ? vehicle.ContactNumber : "";
+            cmd.Parameters.Add("@isNegotiate", SqlDbType.Bit).Value = vehicle.IsNegotiate;
+            cmd.Parameters.Add("@hideNumber", SqlDbType.Bit).Value = vehicle.HideNumber;
+            cmd.Parameters.Add("@Cid", SqlDbType.Int).Value = vehicle.Cid;
+            cmd.Parameters.Add("@Subid", SqlDbType.Int).Value = vehicle.Subid;
+            cmd.Parameters.Add("@Email", SqlDbType.VarChar, 50).Value = vehicle.Email != null ? vehicle.Email : "";
+            int result = cmd.ExecuteNonQuery();
+            conn.Close();
+
+            if (result > 0)
             {
-                SaveFileDetails(item);
+                foreach (var item in vehicle.File)
+                {
+                    SaveFileDetails(item);
+                }
             }
-            throw new NotImplementedException();
         }
 
         public void SaveFileDetails(APN_Files file)
         {
-            SqlConnection conn = db.GetConnection();
+            conn.Open();
             SqlCommand cmd = conn.CreateCommand();
             cmd.CommandText = "Execute pr_APN_AddFiles @filename,@contentType,@imageBytes,@cid,@sid";
             cmd.Parameters.Add("@filename", SqlDbType.VarChar, 50).Value = file.Name;

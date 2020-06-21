@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APNCarSaleDataService.Models
 {
-    class APN_Book
+    public class APN_Book
     {
         public int Id { get; set; }
         public string Name { get; set; }

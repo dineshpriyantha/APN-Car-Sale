@@ -27,6 +27,7 @@ namespace APNCarSaleDataService.Models
         public int Cid { get; set; }
         public int Subid { get; set; }
         public IEnumerable<APN_Files> File { get; set; }
+        public string Email { get; set; }
     }
 
     /// <summary>
