@@ -74,7 +74,7 @@ namespace APN_Car_Sale.Controllers
             };
 
             int pageNumber = (page ?? 1);
-            int pageSize = (PageSize ?? 10);
+            int pageSize = (PageSize ?? 20);
             ViewBag.psize = pageSize;
 
             return View(vehicles.ToPagedList(pageNumber, pageSize));
@@ -118,7 +118,7 @@ namespace APN_Car_Sale.Controllers
             {
                 page = 0;
             }
-            int pageSize = 5;
+            int pageSize = 20;
             int start = (int)(page - 1) * pageSize;
 
             ViewBag.pageCurrent = page;

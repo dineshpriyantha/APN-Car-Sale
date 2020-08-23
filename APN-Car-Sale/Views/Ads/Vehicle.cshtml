@@ -7,35 +7,14 @@
     ViewBag.Title = "Vehicle";
 }
 
-<style>
-    .search-wrap-1 {
-        padding-top: 1em;
-        padding-bottom:0;
-    }
-    a {
-    text-decoration: none;
-    }
-    a:hover {
-    text-decoration: underline;
-    }
-
-    a{
-    color:#000;
-    text-decoration:none;
-    }
-
-
-    a.visited {
-        color:red;
-    }
-    </style>
-
 <script src="~/Template/js/jquery-3.2.1.min.js"></script>
 
 <script>
     $('a').click(function () {
         $(this).addClass("visited");
     });
+
+    
 </script>
 
 <section class="ftco-section ftco-degree-bg">
@@ -43,52 +22,35 @@
         <div class="row">
             <div class="col-md-9 order-md-last ftco-animate fadeInUp ftco-animated">
                 <section>
-                    <div class="container">
-                                              
-                            <div class="topnav">
-                                <a class="active" href="#home">Home</a>
-                                <a href="#about">About</a>
-                                <a href="#contact">Contact</a>
-                                <div class="search-container">
-                                    @*@using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "filterForm" }))
-                                    {
-                                        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Search.." })                                       
-                                        <button type="submit"><i class="fa fa-search"></i></button>
-                                    }*@    
-                                    <input type="text" name="txtSearch" placeholder="Search.." class="txtSearch" />
-                                    @*<button type="button" class="btn btn-warning" id="search">Search</button>*@  
-                                    <button type="submit" id="search"><i class="fa fa-search"></i></button>                           
+                    <div class="container">                                 
+                        <div class="col-lg-12" style="padding-bottom:10px;">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-6 p-0">
+                                    <input type="text" class="form-control search-slt txtSearch" placeholder="Location">
                                 </div>
-
+                                <div class="col-lg-3 col-md-3 col-sm-6 p-0">
+                                    <input type="text" class="form-control search-slt txtSearch" placeholder="Search">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 p-0">
+                                    <select class="form-control search-slt" id="exampleFormControlSelect1">
+                                        <option>Select Brand</option>
+                                        <option>Example one</option>
+                                        <option>Example one</option>
+                                        <option>Example one</option>
+                                        <option>Example one</option>
+                                        <option>Example one</option>
+                                        <option>Example one</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 p-0">
+                                    <button type="button" id="search" class="btn btn-danger wrn-btn">Search</button>
+                                </div>
                             </div>
-                            
-                            <div class="row load-list">
+                        </div>                          
 
-                            </div>
-                                @*@foreach (var item in Model)
-                                {
-
-                                    <div class="col-md-3 col-sm-4 col-xs-6 searchItem">
-                                        <div class="car-wrap ftco-animate fadeInUp ftco-animated">
-                                            <div class="img d-flex align-items-end" style="background-image: url(/Template/images/car-1.jpg);">
-
-                                            </div>
-                                            <div class="text" style="padding:8px">
-                                                <h2 class="mb-0"><a href="/Ads/ad">@Html.DisplayFor(modelItem => item.Brand)</a></h2>
-                                                <span>@Html.DisplayFor(modelItem => item.Model)</span>
-
-                                                <span style="color:#adb2da">Address</span>
-
-                                                <div class="meta">
-                                                    <div style="font-size: 12px;"><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                }*@
+                        <div class="row load-list">
                                 
-                            
+                        </div>                        
 
                         <div class="row mt-5">
                             <div class="col text-center">
@@ -97,30 +59,6 @@
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination" id="load-pagination"></ul>
                                     </nav>
-                                    
-                                                                     
-                                    <!-- Paging -->
-                                    @*@using (Html.BeginForm("Vehicle", "Ads", FormMethod.Get, new { id = "pageSizeForm" }))
-                                    {
-                                        <div class="pager">
-                                            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) sur @Model.PageCount<br />
-
-                                            @Model.Count of @Model.TotalItemCount elements
-
-                                            @Html.PagedListPager(Model, page => Url.Action("Vehicle", new
-                                           {
-                                               page,
-                                               sortOrder = ViewBag.CurrentSort,
-                                               currentFilter = ViewBag.CurrentFilter,
-                                               searchString = ViewBag.CurrentFilter,
-                                               pageSize = ViewBag.psize
-                                           }))
-
-                                          
-                                            Elements per page :
-                                            @Html.DropDownList("pageSize")
-                                        </div>
-                                    }*@
                                 </div>
                             </div>
                         </div>
@@ -131,18 +69,16 @@
             <div class="col-md-3 sidebar ftco-animate fadeInUp ftco-animated">
                 
                 @*@{ Html.RenderAction("LeftSideBar"); }*@
-                <div class="sidebar-box ftco-animate fadeInUp ftco-animated" style="border: 1px solid #adb2da;">
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated sidebar1" > @*style="border: 1px solid #adb2da;"*@                    
+                    <div class="">  @*categories*@                                         
+                        <ul id="category" class="list subCat">
 
-                    <div class="categories">                        
-                        <h3>Categoriesss</h3>                        
-                        <div id="category">
-
-                        </div>
-                        <li><a href="#" onclick="getLocation()">GetNarest Vehicle <span>(140)</span></a></li>                        
+                        </ul>                        
+                        @*<li><a href="#" onclick="getLocation()">GetNarest Vehicle <span>(140)</span></a></li>*@  
                     </div>
                 </div>
                 <br/>
-                <div class="sidebar-box ftco-animate fadeInUp ftco-animated" style="border: 1px solid #adb2da;">
+                @*<div class="sidebar-box ftco-animate fadeInUp ftco-animated" style="border: 1px solid #adb2da;">
                     <h3>Recent Blog</h3>
                     <div class="block-21 d-flex">                        
                         <div class="text">
@@ -154,12 +90,12 @@
                             </div>
                         </div>
                     </div>                    
-                </div>
+                </div>*@
 
                 <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
                     <h3>Tag Cloud</h3>
                     <div class="tagcloud">
-                        <a href="#" class="tag-cloud-link">dish</a>
+                        <a href="#" class="tag-cloud-link">dish vc</a>
                         <a href="#" class="tag-cloud-link">menu</a>
                         <a href="#" class="tag-cloud-link">food</a>
                         <a href="#" class="tag-cloud-link">sweet</a>
@@ -169,10 +105,37 @@
                         <a href="#" class="tag-cloud-link">drinks</a>
                     </div>
                 </div>
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3>Tag Cloud</h3>
+                    <div class="tagcloud">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
     </div>
+
 </section>
 
 

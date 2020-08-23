@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\APN-Car-Sale.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +43,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\APN-Car-Sale.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -331,6 +333,8 @@
     <Content Include="Template\css\animate.css" />
     <Content Include="Template\css\aos.css" />
     <Content Include="Template\css\bootstrap-datepicker.css" />
+    <Content Include="Template\css\carCard.css" />
+    <Content Include="Template\css\categoryCss.css" />
     <Content Include="Template\css\flaticon.css" />
     <Content Include="Template\css\icomoon.css" />
     <Content Include="Template\css\ionicons.min.css" />
@@ -339,6 +343,8 @@
     <Content Include="Template\css\open-iconic-bootstrap.min.css" />
     <Content Include="Template\css\owl.carousel.min.css" />
     <Content Include="Template\css\owl.theme.default.min.css" />
+    <Content Include="Template\css\product.css" />
+    <Content Include="Template\css\searchBox.css" />
     <Content Include="Template\css\style.css" />
     <Content Include="Template\images\about.jpg" />
     <Content Include="Template\images\bg_1.jpg" />

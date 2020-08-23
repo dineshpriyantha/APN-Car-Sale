@@ -60,7 +60,12 @@ namespace APN_Car_Sale
                         "~/Template/css/icomoon.css",
                         "~/Content/slider/css/flexslider.css",
                         "~/Content/slider/css/demo.css",
-                        "~/Template/css/style.css"
+                        "~/Template/css/style.css",
+                        "~/Template/css/product.css",
+                        "~/Template/css/carCard.css",
+                        "~/Template/css/searchBox.css",
+                        "~/Template/css/partner.css",
+                        "~/Template/css/categoryCss.css"
                 ));
         }
     }

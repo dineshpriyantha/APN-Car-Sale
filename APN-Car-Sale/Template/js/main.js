@@ -342,29 +342,32 @@ function showPosition(position) {
 
 }
 
-// load subcategory by category id
-function loadSubCategory(id) {
-	var url = "/Ads/GetSubCategoryByCategoryId?cid=" + id;
-	var setData = $("#id-" + id);
-	$.ajax({
-		type: "GET",
-		url: url,
-		success: function (data) {
-			var obj = JSON.parse(JSON.stringify(data));
-			setData.html(" ");
-			for (var i = 0; i < obj.length; i++) {
-				var data = "<ol>" +
-							 "<li><a href='#' onclick='load(" + obj[i].SId + ")' style='color:#fc983c'>" + obj[i].SName + "</a></li>" +
-						   "</ol>";
 
-				//$("#id-"+obj[i].SId).click(load(0, obj[i].SId));
-				setData.append(data);
 
-			}
 
-		}
-	})
-}
+    // load subcategory by category id
+    function loadSubCategory(id) {
+        var url = "/Ads/GetSubCategoryByCategoryId?cid=" + id;
+        var setData = $("#id-" + id);
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(JSON.stringify(data));
+                setData.html(" ");
+                for (var i = 0; i < obj.length; i++) {
+                    var data = "<li href='#' onclick='load(" + obj[i].SId + ")'><a href='#'  style='color:#fff'>" + obj[i].SName + "</a></li>";
+
+                    //$("#id-"+obj[i].SId).click(load(0, obj[i].SId));
+                    setData.append(data);
+
+                }
+
+            }
+        })
+    }
+
+
 
 $(function () { // Submit pageSizeForm when another pageSize value is selected
 	$("#pageSize").change(function () {
@@ -379,11 +382,11 @@ function DataBind(List) {
 	var SetData = $("#category");
 	for (var i = 0; i < List.length; i++) {
 
-		var data = "<li>" +
-					 "<a href='#' onclick='load(null, null, null, "+List[i].id+")' id=" + List[i].id + " data-toggle='collapse' data-target=#id-" + List[i].id + " >" + List[i].name + "<span id='subcount'></span></a>" +
-					 "<div id=id-" + List[i].id + " class='collapse' style='padding-left: 20px;padding-top: 10px;'>" +
-					 "</div>"
-		"</li>";
+	    var data = "<li>" +
+					"<a href='#' onclick='load(null, null, null, "+List[i].id+")' id=" + List[i].id + " data-toggle='collapse' data-target=#id-" + List[i].id + " >" + List[i].name + "<span id='subcount'></span></a>" +                    
+                    "<ul id=id-" + List[i].id + " class='list right_sliding' style='background-color: #3770a9;'>" +
+					"</ul>"
+		            "</li>";
 		SetData.append(data);
 		loadSubCategory(List[i].id)
 
@@ -392,67 +395,103 @@ function DataBind(List) {
 
 
 
+                    
+
 //function load pagination
 function load(sid, txtSearch, page, cid) {
-    //alert(cid);
+	//alert(cid);
 	$.ajax({
-	    url: "/Ads/getAllads",
+		url: "/Ads/getAllads",
 		type: "GET",
 		data: { txtSearch: txtSearch, page: page, sid: sid , cid: cid},
 		dataType: 'json',
 		contentType: 'application/json;charset=utf-8',
 		success: function (result) {
-		    var str = "";
-		    var numSize = "";
-		    $("#load-pagination").html(" ");
+			var str = "";
+			var numSize = "";
+			$("#load-pagination").html(" ");
 			$.each(result.data, function (index, value) {
 
 				str += "<div class='col-md-3 col-sm-6 col-xs-6 searchItem'>";
-				str += "<div class='car-wrap ftco-animate fadeInUp ftco-animated'>";
-				str += "<div class='img d-flex align-items-end' style='background-image: url(/Template/images/car-1.jpg);'>";
+				str += "<div class='product-grid4'>";
+				str += "<div class='product-image4' >";
 
-				str += "</div>";
-				str += "<div class='text' style='padding:8px'>";
-				str += "<h2 class='mb-0'><a href='/Ads/ad'>" + value.Brand + "</a></h2>";
-				str += "<span>" + value.Model + "</span>";
+				//str += "</div>";
+				//str += "<div class='text' style='padding:8px'>";
+				//str += "<p><a href='/Ads/ad'> dfdfdfdfd d fdfdfdf" + value.Brand + "</a></p>";
+				//str += "<h4> " + value.Model + "</h4>";
+				str += "<a href='/Ads/ad'>";
+				str += "<img class='pic-1' src='/Template/images/car-1.jpg'>";
+				str += "<img class='pic-2' src='/Template/images/car-11.jpg'>";
+			    str += "</a>";
 
-				str += "<span style='color:#adb2da'>Address</span>";
+			    str += "<div class='product-content'>";
+			    str += "<h3 class='title'><a href='/Ads/ad'>" + value.Brand + "</a></h3>";
+			    str += "<h3 class='title'><a href='/Ads/ad'>" + value.Model + "</a></h3>";
+			    str += "<div class='price'>";
+			    str += "$14.40";
+			    str += "<span>$16.00</span>";
+			    str += "</div>";
+			    str += "</div>";
 
-				str += "<div class='meta'>";
-				str += "<div style='font-size: 12px;'><a href='#'><span class='icon-calendar'></span> July 12, 2018</a></div>";
-				str += "</div>";
+				//str += "<span style='color:#adb2da'>Address</span>";
+
+				//str += "<div class='meta'>";
+				//str += "<div style='font-size: 12px;'><a href='#'><span class='icon-calendar'></span> July 12, 2018</a></div>";
+				//str += "</div>";
 				str += "</div>";
 				str += "</div>";
 				str += "</div>";
 
+			    //str += "<div class='col-md-3 col-sm-6 searchItem'>";
+				//str += "<div class='product-grid4'>";
+				//str += "<div class='product-image4'>";
+
+				//str += "<a href='#'>";
+				//str += "<img class='pic-1' src='http://bestjquery.com/tutorial/product-grid/demo5/images/img-1.jpg'>";
+				//str += "<img class='pic-2' src='http://bestjquery.com/tutorial/product-grid/demo5/images/img-2.jpg'>";
+				//str += "</a>";
+
+				//str += "<span class='product-new-label'>New</span>";
+				//str += "<span class='product-discount-label'>-10%</span>";
+				//str += "<div class='product-content'>";
+				//str += "<h3 class='title'><a href='#'>"+ value.Model +"</a></h3>";
+				//str += "<div class='price'>";
+				//str += "$14.40";
+				//str += "<span>$16.00</span>";
+				//str += "</div>";
+				//str += "</div>";
+				//str += "</div>";
+				//str += "</div>";
+			    // style='font-size:1vw;'
 				//create pagination
 				var pagination_string = "";
 				var pageCurrent = result.pageCurrent;
 				numSize = result.numSize;
 				if (numSize >= 1) {
 
-				    //create button previous
-				    if (pageCurrent > 1) {
-				        var pagePrevious = pageCurrent - 1;
-				        pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '><<</a></li>';
-				    }
+					//create button previous
+					if (pageCurrent > 1) {
+						var pagePrevious = pageCurrent - 1;
+						pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '><<</a></li>';
+					}
 
-				    for (i = 1; i <= numSize; i++) {
-				        if (i == pageCurrent) {
-				            pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
-				        } else {
-				            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
-				        }
-				    }
+					for (i = 1; i <= numSize; i++) {
+						if (i == pageCurrent) {
+							pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+						} else {
+							pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+						}
+					}
 
-				    //create button next
-				    if (pageCurrent > 0 && pageCurrent < numSize) {
-				        var pageNext = pageCurrent + 1;
-				        pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>>></a></li>';
-				    }
+					//create button next
+					if (pageCurrent > 0 && pageCurrent < numSize) {
+						var pageNext = pageCurrent + 1;
+						pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>>></a></li>';
+					}
 
-				    //load pagination
-				    $("#load-pagination").html(pagination_string);
+					//load pagination
+					$("#load-pagination").html(pagination_string);
 				}
 			});
 
